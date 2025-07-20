@@ -3,7 +3,7 @@ import { useLocation, Link } from "wouter";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Brain, Sparkles } from "lucide-react";
+import { Zap, Star } from "lucide-react";
 
 interface SidebarProps {
   onSOSClick: () => void;
@@ -34,13 +34,11 @@ export default function Sidebar({ onSOSClick }: SidebarProps) {
         <div className="flex items-center justify-between">
           <Link href="/dashboard">
             <a className="flex items-center space-x-2">
-              <div className="relative bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-700 p-2.5 rounded-2xl shadow-lg">
-                <Brain className="h-5 w-5 text-white" />
-                <div className="absolute -top-1 -right-1">
-                  <Sparkles className="h-2.5 w-2.5 text-pink-300" />
-                </div>
+              <div className="relative bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 p-2.5 rounded-xl shadow-lg">
+                <Zap className="h-5 w-5 text-white" />
+                <Star className="h-2 w-2 text-yellow-300 absolute -top-0.5 -right-0.5" />
               </div>
-              <span className="font-bold text-lg bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">SereneAI</span>
+              <span className="font-bold text-lg bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 bg-clip-text text-transparent">SereneAI</span>
             </a>
           </Link>
           <button 

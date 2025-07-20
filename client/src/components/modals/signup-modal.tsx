@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Eye, EyeOff, Heart, ArrowRight, Check } from "lucide-react";
+import { Loader2, Eye, EyeOff, Zap, ArrowRight, Check, Star } from "lucide-react";
 import { insertUserSchema } from "@shared/schema";
 
 interface SignupModalProps {
@@ -91,9 +91,12 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
       <DialogContent className="sm:max-w-2xl border-0 p-0 bg-transparent max-h-[90vh] overflow-y-auto">
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-8 text-center">
+          <div className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 p-8 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
-              <Heart className="w-8 h-8 text-white" />
+              <div className="relative">
+                <Zap className="w-8 h-8 text-white" />
+                <Star className="w-3 h-3 text-yellow-300 absolute -top-1 -right-1" />
+              </div>
             </div>
             <DialogTitle className="text-3xl font-bold text-white mb-2">
               Join SereneAI

@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2, Eye, EyeOff, Brain, ArrowRight } from "lucide-react";
+import { Loader2, Eye, EyeOff, Zap, ArrowRight, Star } from "lucide-react";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -70,9 +70,12 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }: LoginModa
       <DialogContent className="w-[90vw] max-w-sm sm:max-w-md border-0 p-0 bg-transparent max-h-[90vh] overflow-hidden mx-auto">
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-3 sm:p-4 text-center">
+          <div className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 p-3 sm:p-4 text-center">
             <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full mb-2 sm:mb-3">
-              <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <div className="relative">
+                <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <Star className="w-2 h-2 text-yellow-300 absolute -top-0.5 -right-0.5" />
+              </div>
             </div>
             <DialogTitle className="text-lg sm:text-xl font-bold text-white mb-1">
               Welcome Back

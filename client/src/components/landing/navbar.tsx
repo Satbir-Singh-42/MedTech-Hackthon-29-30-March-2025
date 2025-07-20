@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain, Sparkles } from "lucide-react";
+import { Zap, Star } from "lucide-react";
 
 interface NavbarProps {
   onLoginClick: () => void;
@@ -76,13 +76,11 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-lg">
-            <div className="relative bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-700 p-2.5 rounded-2xl shadow-lg">
-              <Brain className="h-6 w-6 text-white" />
-              <div className="absolute -top-1 -right-1">
-                <Sparkles className="h-3 w-3 text-pink-300" />
-              </div>
+            <div className="relative bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 p-2.5 rounded-xl shadow-lg transform hover:scale-105 transition-transform">
+              <Zap className="h-6 w-6 text-white" />
+              <Star className="h-2.5 w-2.5 text-yellow-300 absolute -top-0.5 -right-0.5" />
             </div>
-            <span className="font-bold text-2xl bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">SereneAI</span>
+            <span className="font-bold text-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 bg-clip-text text-transparent">SereneAI</span>
           </Link>
           
           {/* Desktop Navigation */}
@@ -114,16 +112,16 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
           <div className="hidden md:flex items-center space-x-3">
             <Button 
               variant="ghost" 
-              className="text-gray-700 hover:text-purple-600 hover:bg-purple-50 font-medium px-6 py-2 rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+              className="text-gray-700 hover:text-violet-600 hover:bg-violet-50 font-medium px-6 py-2 rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
               onClick={onLoginClick}
             >
               Login
             </Button>
             <Button 
-              className="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-700 hover:via-indigo-700 hover:to-purple-800 text-white font-semibold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+              className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 hover:from-violet-700 hover:via-purple-700 hover:to-indigo-800 text-white font-semibold px-6 py-2 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
               onClick={onSignupClick}
             >
-              <Sparkles className="w-4 h-4 mr-2" />
+              <Star className="w-4 h-4 mr-2" />
               Get Started
             </Button>
           </div>
@@ -167,7 +165,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
             <div className="space-y-3 pt-4 border-t border-gray-200">
               <Button 
                 variant="ghost" 
-                className="w-full text-gray-700 hover:text-purple-600 hover:bg-purple-50 py-3 font-medium rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+                className="w-full text-gray-700 hover:text-violet-600 hover:bg-violet-50 py-3 font-medium rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
                 onClick={() => {
                   onLoginClick();
                   setIsMobileMenuOpen(false);
@@ -176,13 +174,13 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
                 Login
               </Button>
               <Button 
-                className="w-full bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-700 hover:via-indigo-700 hover:to-purple-800 text-white py-3 font-semibold rounded-xl shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+                className="w-full bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 hover:from-violet-700 hover:via-purple-700 hover:to-indigo-800 text-white py-3 font-semibold rounded-xl shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
                 onClick={() => {
                   onSignupClick();
                   setIsMobileMenuOpen(false);
                 }}
               >
-                <Sparkles className="w-4 h-4 mr-2" />
+                <Star className="w-4 h-4 mr-2" />
                 Get Started
               </Button>
             </div>

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Brain, Shield, Users, Sparkles } from "lucide-react";
+import { Zap, Shield, Users, Star } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
@@ -32,8 +32,8 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
           <div className="space-y-6">
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
               <div className="relative mr-2">
-                <Brain className="w-4 h-4 text-purple-300" />
-                <Sparkles className="w-2 h-2 text-pink-300 absolute -top-0.5 -right-0.5" />
+                <Zap className="w-4 h-4 text-violet-300" />
+                <Star className="w-2 h-2 text-yellow-300 absolute -top-0.5 -right-0.5" />
               </div>
               <span className="text-white font-medium text-sm">
                 SereneAI - Professional Mental Wellness
@@ -56,10 +56,10 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
               <Button
                 onClick={onGetStarted}
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 font-semibold rounded-full shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 hover:from-violet-700 hover:via-purple-700 hover:to-indigo-800 text-white px-8 py-3 font-semibold rounded-full shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               >
                 Get Started
-                <Sparkles className="w-4 h-4 ml-2" />
+                <Star className="w-4 h-4 ml-2" />
               </Button>
               
               <Button
