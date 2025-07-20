@@ -72,50 +72,59 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
 
   return (
     <nav className="bg-white shadow-lg fixed top-0 left-0 right-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+          {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-lg">
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-2 rounded-xl shadow-md">
               <Heart className="h-6 w-6 text-white fill-white" />
             </div>
             <span className="font-bold text-2xl text-gray-900">SereneAI</span>
           </Link>
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => {
-              const sectionId = item.href.replace('#', '');
-              const isActive = activeSection === sectionId;
-              
-              return (
-                <a 
-                  key={item.href}
-                  href={item.href} 
-                  className={`transition-colors duration-200 font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md px-2 py-1 ${
-                    isActive 
-                      ? 'text-purple-600 font-semibold' 
-                      : 'text-gray-600 hover:text-purple-600'
-                  }`}
-                  onClick={(e) => handleNavLinkClick(e, item.href)}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="outline" 
-                className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-medium px-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
-                onClick={onLoginClick}
-              >
-                Login
-              </Button>
-              <Button 
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium px-6 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
-                onClick={onSignupClick}
-              >
-                Get Started
-              </Button>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center justify-center flex-1 px-8">
+            <div className="flex items-center space-x-8">
+              {navItems.map((item) => {
+                const sectionId = item.href.replace('#', '');
+                const isActive = activeSection === sectionId;
+                
+                return (
+                  <a 
+                    key={item.href}
+                    href={item.href} 
+                    className={`transition-colors duration-200 font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md px-2 py-1 ${
+                      isActive 
+                        ? 'text-purple-600 font-semibold' 
+                        : 'text-gray-600 hover:text-purple-600'
+                    }`}
+                    onClick={(e) => handleNavLinkClick(e, item.href)}
+                  >
+                    {item.label}
+                  </a>
+                );
+              })}
             </div>
           </div>
+          
+          {/* Desktop Auth Buttons */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Button 
+              variant="outline" 
+              className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-medium px-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+              onClick={onLoginClick}
+            >
+              Login
+            </Button>
+            <Button 
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium px-6 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+              onClick={onSignupClick}
+            >
+              Get Started
+            </Button>
+          </div>
+          
+          {/* Mobile Menu Button */}
           <button 
             className="md:hidden text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md p-1"
             onClick={toggleMobileMenu}
@@ -131,7 +140,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
-          <div className="px-4 py-6 space-y-6">
+          <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
             {navItems.map((item) => {
               const sectionId = item.href.replace('#', '');
               const isActive = activeSection === sectionId;
