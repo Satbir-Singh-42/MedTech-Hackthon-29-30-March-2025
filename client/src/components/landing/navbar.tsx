@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 
@@ -9,11 +9,12 @@ interface NavbarProps {
 
 export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
   const [location] = useLocation();
 
   const navItems = [
     { label: "Features", href: "#features" },
-    { label: "About", href: "#about" },
+    { label: "Testimonials", href: "#testimonials" },
     { label: "Contact", href: "#contact" },
   ];
 
@@ -21,8 +22,51 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleNavLinkClick = () => {
+  // Track active section based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['features', 'testimonials', 'contact'];
+      const navbarHeight = 64;
+      const scrollPosition = window.scrollY + navbarHeight + 100;
+
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+      
+      // If at the top, clear active section
+      if (window.scrollY < 100) {
+        setActiveSection("");
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
     setIsMobileMenuOpen(false);
+    
+    // Smooth scroll to the target element
+    const targetId = href.replace('#', '');
+    const targetElement = document.getElementById(targetId);
+    
+    if (targetElement) {
+      const navbarHeight = 64; // Height of fixed navbar
+      const targetPosition = targetElement.offsetTop - navbarHeight;
+      
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
@@ -38,16 +82,25 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
             <span className="font-bold text-2xl text-gray-900">MindfulAI</span>
           </Link>
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <a 
-                key={item.href}
-                href={item.href} 
-                className="text-gray-600 hover:text-purple-600 transition-colors duration-200 font-medium"
-                onClick={handleNavLinkClick}
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const sectionId = item.href.replace('#', '');
+              const isActive = activeSection === sectionId;
+              
+              return (
+                <a 
+                  key={item.href}
+                  href={item.href} 
+                  className={`transition-colors duration-200 font-medium cursor-pointer ${
+                    isActive 
+                      ? 'text-purple-600 font-semibold' 
+                      : 'text-gray-600 hover:text-purple-600'
+                  }`}
+                  onClick={(e) => handleNavLinkClick(e, item.href)}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
             <div className="flex items-center space-x-4">
               <Button 
                 variant="outline" 
@@ -80,16 +133,25 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
           <div className="px-4 py-6 space-y-6">
-            {navItems.map((item) => (
-              <a 
-                key={item.href}
-                href={item.href} 
-                className="block text-gray-600 hover:text-purple-600 transition-colors duration-200 font-medium text-lg"
-                onClick={handleNavLinkClick}
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const sectionId = item.href.replace('#', '');
+              const isActive = activeSection === sectionId;
+              
+              return (
+                <a 
+                  key={item.href}
+                  href={item.href} 
+                  className={`block transition-colors duration-200 font-medium text-lg cursor-pointer ${
+                    isActive 
+                      ? 'text-purple-600 font-semibold' 
+                      : 'text-gray-600 hover:text-purple-600'
+                  }`}
+                  onClick={(e) => handleNavLinkClick(e, item.href)}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
             <div className="space-y-3 pt-4 border-t border-gray-200">
               <Button 
                 variant="outline" 

@@ -55,7 +55,7 @@ export default function HomePage() {
         <section className="py-16 lg:py-24">
           <FeaturesSection />
         </section>
-        <section className="py-16 lg:py-24 bg-gray-50">
+        <section id="testimonials" className="py-16 lg:py-24 bg-gray-50">
           <TestimonialsSection />
         </section>
         <CTASection onGetStarted={handleGetStarted} />

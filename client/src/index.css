@@ -121,4 +121,14 @@
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
+  
+  /* Smooth scrolling for the entire page */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Enhanced focus states for navigation */
+  .nav-link-active {
+    @apply text-purple-600 font-semibold;
+  }
 }

@@ -24,13 +24,13 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Resources</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Help Center</a></li>
+              <li><a href="#features" className="text-gray-300 hover:text-white transition-colors duration-200">Features</a></li>
+              <li><a href="#testimonials" className="text-gray-300 hover:text-white transition-colors duration-200">Testimonials</a></li>
               <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Privacy Policy</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Terms of Service</a></li>
             </ul>
           </div>
           
-          <div>
+          <div id="contact">
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <ul className="space-y-3">
               <li><a href="mailto:support@mindfulai.com" className="text-gray-300 hover:text-white transition-colors duration-200">support@mindfulai.com</a></li>
