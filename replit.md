@@ -19,6 +19,14 @@ A full-stack mental health and wellness application with mood tracking, AI chat 
 - Secure session management
 
 ## Recent Changes
+- **2025-01-20 - Demo & Chat Integration Verified**: 
+  - Confirmed demo login functionality works perfectly with React Query cache updates
+  - Fixed all authentication API parameter order issues (method, url, data)
+  - Verified AI chat integration with proper sentiment analysis and response generation
+  - Demo chat history loads correctly with pre-populated conversation examples
+  - All authentication features (demo login, regular login, signup) working properly
+  - Enhanced error handling and user feedback for authentication flows
+  - Updated all button styling to consistent violet/purple/indigo gradient theme
 - **2025-01-20 - Demo Account & Authentication Setup**: 
   - Added comprehensive demo account with dummy data (username: demo, password: demo123)
   - Created sample mood entries for demo user spanning multiple days

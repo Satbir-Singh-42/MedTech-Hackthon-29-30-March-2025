@@ -20,16 +20,38 @@ type Message = {
 export default function ChatPage() {
   const { user } = useAuth();
   const [isSOSModalOpen, setIsSOSModalOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 0,
-      sender: "ai",
-      message: "Hello! I'm your AI companion. How are you feeling today?",
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Fetch existing chat messages
+  const { data: chatHistory } = useQuery({
+    queryKey: ["/api/chat/messages"],
+    enabled: !!user,
+  });
+
+  // Initialize messages with chat history or default welcome message
+  useEffect(() => {
+    if (chatHistory && Array.isArray(chatHistory)) {
+      const formattedMessages = chatHistory.map((msg: any) => ({
+        id: msg.id,
+        sender: msg.sender,
+        message: msg.message,
+        timestamp: new Date(msg.timestamp),
+        sentiment: msg.sentiment,
+        suggestions: msg.suggestions,
+      }));
+      setMessages(formattedMessages);
+    } else if (messages.length === 0) {
+      // Set default welcome message if no chat history
+      setMessages([{
+        id: 0,
+        sender: "ai",
+        message: "Hello! I'm your AI companion. How are you feeling today?",
+        timestamp: new Date(),
+      }]);
+    }
+  }, [chatHistory]);
 
   // Send message mutation
   const sendMessageMutation = useMutation({
@@ -46,6 +68,11 @@ export default function ChatPage() {
         sentiment: data.sentiment,
         suggestions: data.suggestions,
       }]);
+      // Invalidate chat messages to refetch updated history
+      queryClient.invalidateQueries({ queryKey: ["/api/chat/messages"] });
+    },
+    onError: (error) => {
+      console.error("Failed to send message:", error);
     },
   });
 
