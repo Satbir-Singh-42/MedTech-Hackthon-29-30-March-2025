@@ -79,7 +79,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </div>
-            <span className="font-bold text-2xl text-gray-900">MindfulAI</span>
+            <span className="font-bold text-2xl text-gray-900">SereneAI</span>
           </Link>
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => {

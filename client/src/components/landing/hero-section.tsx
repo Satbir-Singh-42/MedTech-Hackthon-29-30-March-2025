@@ -33,7 +33,7 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
               <Sparkles className="w-4 h-4 mr-2 text-pink-300" />
               <span className="text-white font-medium text-sm">
-                AI-Powered Mental Wellness
+                SereneAI - Professional Mental Wellness
               </span>
             </div>
             
@@ -49,20 +49,7 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
               AI-powered mental health support with mood tracking, meditation, and professional collaboration tools.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4 text-white/80 mb-8">
-              <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full">
-                <Shield className="w-4 h-4 mr-2 text-green-400" />
-                <span className="text-sm font-medium">Secure</span>
-              </div>
-              <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full">
-                <Heart className="w-4 h-4 mr-2 text-red-400" />
-                <span className="text-sm font-medium">Evidence-Based</span>
-              </div>
-              <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full">
-                <Users className="w-4 h-4 mr-2 text-blue-400" />
-                <span className="text-sm font-medium">Professional</span>
-              </div>
-            </div>
+
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button

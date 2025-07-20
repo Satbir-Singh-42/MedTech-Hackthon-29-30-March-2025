@@ -50,7 +50,7 @@ export default function HomePage() {
         onSignupClick={() => setIsSignupModalOpen(true)}
       />
       
-      <main>
+      <main className="pt-16">
         <HeroSection onGetStarted={handleGetStarted} onDemoLogin={handleDemoLogin} />
         <section className="py-12">
           <FeaturesSection />
