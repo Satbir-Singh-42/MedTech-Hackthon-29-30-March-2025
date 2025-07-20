@@ -74,7 +74,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
     <nav className="bg-white shadow-lg fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center space-x-3">
+          <Link href="/" className="flex items-center space-x-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-lg">
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-2 rounded-xl shadow-md">
               <Heart className="h-6 w-6 text-white fill-white" />
             </div>
@@ -89,7 +89,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
                 <a 
                   key={item.href}
                   href={item.href} 
-                  className={`transition-colors duration-200 font-medium cursor-pointer ${
+                  className={`transition-colors duration-200 font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md px-2 py-1 ${
                     isActive 
                       ? 'text-purple-600 font-semibold' 
                       : 'text-gray-600 hover:text-purple-600'
@@ -140,7 +140,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
                 <a 
                   key={item.href}
                   href={item.href} 
-                  className={`block transition-colors duration-200 font-medium text-lg cursor-pointer ${
+                  className={`block transition-colors duration-200 font-medium text-lg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md px-2 py-1 ${
                     isActive 
                       ? 'text-purple-600 font-semibold' 
                       : 'text-gray-600 hover:text-purple-600'
