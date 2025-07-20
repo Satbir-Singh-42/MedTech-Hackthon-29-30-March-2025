@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Heart, Shield, Users, Sparkles } from "lucide-react";
+import { Brain, Shield, Users, Sparkles } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
@@ -31,7 +31,10 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
         <div className="max-w-4xl mx-auto text-center">
           <div className="space-y-6">
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-              <Sparkles className="w-4 h-4 mr-2 text-pink-300" />
+              <div className="relative mr-2">
+                <Brain className="w-4 h-4 text-purple-300" />
+                <Sparkles className="w-2 h-2 text-pink-300 absolute -top-0.5 -right-0.5" />
+              </div>
               <span className="text-white font-medium text-sm">
                 SereneAI - Professional Mental Wellness
               </span>
