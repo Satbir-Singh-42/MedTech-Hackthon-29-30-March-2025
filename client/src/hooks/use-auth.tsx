@@ -33,25 +33,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData) => {
-      const res = await apiRequest("/api/auth/login", "POST", credentials);
+      const res = await apiRequest("POST", "/api/auth/login", credentials);
+      if (!res.ok) {
+        throw new Error(`Login failed: ${res.status}`);
+      }
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {
+      // Update the user data in cache
       queryClient.setQueryData(["/api/user"], user);
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
       toast({
         title: "Login successful",
         description: "Welcome back to SereneAI!",
       });
-      // Force navigation after successful login
+      
+      // Navigate to dashboard
       setTimeout(() => {
         window.location.href = "/dashboard";
       }, 500);
     },
     onError: (error: Error) => {
+      console.error("Login error:", error);
       toast({
         title: "Login failed",
-        description: error.message,
+        description: error.message || "Please check your credentials and try again.",
         variant: "destructive",
       });
     },
@@ -59,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const registerMutation = useMutation({
     mutationFn: async (credentials: InsertUser) => {
-      const res = await apiRequest("/api/auth/register", "POST", credentials);
+      const res = await apiRequest("POST", "/api/auth/register", credentials);
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {
@@ -85,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      await apiRequest("/api/auth/logout", "POST");
+      await apiRequest("POST", "/api/auth/logout");
     },
     onSuccess: () => {
       queryClient.setQueryData(["/api/user"], null);

@@ -18,11 +18,16 @@ export default function HomePage() {
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
   // Demo login functionality
-  const handleDemoLogin = () => {
-    loginMutation.mutate({
-      username: "demo",
-      password: "demo123"
-    });
+  const handleDemoLogin = async () => {
+    try {
+      console.log("Demo login clicked");
+      loginMutation.mutate({
+        username: "demo",
+        password: "demo123"
+      });
+    } catch (error) {
+      console.error("Demo login error:", error);
+    }
   };
 
 
@@ -32,7 +37,7 @@ export default function HomePage() {
   };
 
   // If the user is already logged in, redirect to dashboard
-  if (user) {
+  if (user && !loginMutation.isPending) {
     navigate("/dashboard");
     return null;
   }
