@@ -24,10 +24,11 @@ export default function ChatPage() {
   const [inputMessage, setInputMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch existing chat messages
+  // Fetch existing chat messages only if user is authenticated
   const { data: chatHistory } = useQuery({
     queryKey: ["/api/chat/messages"],
     enabled: !!user,
+    retry: false,
   });
 
   // Initialize messages with chat history or default welcome message
@@ -43,11 +44,15 @@ export default function ChatPage() {
       }));
       setMessages(formattedMessages);
     } else if (messages.length === 0) {
-      // Set default welcome message if no chat history
+      // Set default welcome message based on user status
+      const welcomeMessage = user 
+        ? "Hello! I'm your AI companion. How are you feeling today?"
+        : "Welcome to SereneAI! Please log in from the home page to start chatting and save your conversation history.";
+      
       setMessages([{
         id: 0,
         sender: "ai",
-        message: "Hello! I'm your AI companion. How are you feeling today?",
+        message: welcomeMessage,
         timestamp: new Date(),
       }]);
     }
@@ -83,6 +88,27 @@ export default function ChatPage() {
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
+    
+    // If user is not logged in, show local message only
+    if (!user) {
+      const newMessage: Message = {
+        id: Date.now(),
+        sender: "user",
+        message: inputMessage,
+        timestamp: new Date(),
+      };
+      
+      const aiResponse: Message = {
+        id: Date.now() + 1,
+        sender: "ai",
+        message: "I can see your message, but to save our conversation and provide personalized responses, please log in from the home page. You can still chat here, but the conversation won't be saved.",
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, newMessage, aiResponse]);
+      setInputMessage("");
+      return;
+    }
 
     const newMessage: Message = {
       id: Date.now(),

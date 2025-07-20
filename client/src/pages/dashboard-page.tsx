@@ -130,9 +130,11 @@ export default function DashboardPage() {
     return () => clearTimeout(timer);
   }, []);
   
-  // Fetch the user's mood entries
+  // Fetch the user's mood entries only if user is authenticated
   const { data: moodEntries, isLoading: isLoadingMoodEntries } = useQuery<MoodEntry[]>({
     queryKey: ["/api/mood-entries"],
+    enabled: !!user,
+    retry: false,
   });
 
   // Generate chart data based on mood entries
@@ -200,6 +202,13 @@ export default function DashboardPage() {
             <h1 className="font-display font-bold text-xl md:text-2xl lg:text-3xl text-gradient bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-indigo-700 leading-tight">
               {getGreeting()}, {user?.firstName || "Friend"}!
             </h1>
+            {!user && (
+              <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-700">
+                  Please log in to see your personal data. <a href="/" className="underline font-medium">Return to home page to sign in</a>
+                </p>
+              </div>
+            )}
           </div>
           
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">

@@ -6,14 +6,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 import HomePage from "@/pages/home-page";
-import AuthPage from "@/pages/auth-page";
 import DashboardPage from "@/pages/dashboard-page";
 import ChatPage from "@/pages/chat-page";
 import MeditatePage from "@/pages/meditate-page";
 import JournalPage from "@/pages/journal-page";
 import CollaboratorsPage from "@/pages/collaborators-page";
 import SettingsPage from "@/pages/settings-page";
-import { ProtectedRoute } from "./lib/protected-route";
 
 // Component to inject Botpress script for authenticated routes
 function BotpressScript() {
@@ -68,13 +66,12 @@ function Router() {
       <BotpressScript />
       <Switch>
         <Route path="/" component={HomePage} />
-        <Route path="/auth" component={AuthPage} />
-        <ProtectedRoute path="/dashboard" component={DashboardPage} />
-        <ProtectedRoute path="/chat" component={ChatPage} />
-        <ProtectedRoute path="/meditate" component={MeditatePage} />
-        <ProtectedRoute path="/journal" component={JournalPage} />
-        <ProtectedRoute path="/collaborators" component={CollaboratorsPage} />
-        <ProtectedRoute path="/settings" component={SettingsPage} />
+        <Route path="/dashboard" component={DashboardPage} />
+        <Route path="/chat" component={ChatPage} />
+        <Route path="/meditate" component={MeditatePage} />
+        <Route path="/journal" component={JournalPage} />
+        <Route path="/collaborators" component={CollaboratorsPage} />
+        <Route path="/settings" component={SettingsPage} />
         {/* Fallback to 404 */}
         <Route component={NotFound} />
       </Switch>

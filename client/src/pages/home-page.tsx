@@ -36,11 +36,7 @@ export default function HomePage() {
     setIsSignupModalOpen(true);
   };
 
-  // If the user is already logged in, redirect to dashboard
-  if (user && !loginMutation.isPending) {
-    navigate("/dashboard");
-    return null;
-  }
+  // Navigation handled by auth success callback in useAuth hook
 
   return (
     <div className="min-h-screen flex flex-col bg-white overflow-x-hidden">
