@@ -96,7 +96,7 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
               <Heart className="w-8 h-8 text-white" />
             </div>
             <DialogTitle className="text-3xl font-bold text-white mb-2">
-              Join MindfulAI
+              Join SereneAI
             </DialogTitle>
             <DialogDescription className="text-pink-100">
               Begin your personalized mental wellness journey today

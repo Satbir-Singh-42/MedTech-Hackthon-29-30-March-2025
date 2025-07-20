@@ -110,7 +110,7 @@ export default function AuthPage() {
                 <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
                   Welcome to
                   <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    {" "}MindfulAI
+                    {" "}SereneAI
                   </span>
                 </h1>
                 <p className="text-xl text-gray-300 max-w-lg mx-auto lg:mx-0">
@@ -250,7 +250,7 @@ export default function AuthPage() {
                               Logging in...
                             </>
                           ) : (
-                            "Login to MindfulAI"
+                            "Login to SereneAI"
                           )}
                         </Button>
                       </form>

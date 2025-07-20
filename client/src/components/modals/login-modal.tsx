@@ -78,7 +78,7 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }: LoginModa
               Welcome Back
             </DialogTitle>
             <DialogDescription className="text-purple-100">
-              Continue your mental wellness journey with MindfulAI
+              Continue your mental wellness journey with SereneAI
             </DialogDescription>
           </div>
 

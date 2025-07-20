@@ -5,7 +5,7 @@ export default function TestimonialsSection() {
     {
       id: 1,
       name: "Sarah M.",
-      text: "MindfulAI has been a game-changer for my mental health journey. The personalized support feels genuine and helpful."
+      text: "SereneAI has been a game-changer for my mental health journey. The personalized support feels genuine and helpful."
     },
     {
       id: 2,
