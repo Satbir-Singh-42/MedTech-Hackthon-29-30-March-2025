@@ -83,9 +83,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router />
-        <BotpressScript />
-        <Toaster />
+        <div className="app min-h-screen">
+          <Router />
+          <BotpressScript />
+          <Toaster />
+        </div>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -326,24 +326,24 @@ export default function MeditatePage() {
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-b from-indigo-50/50 to-white">
       <Sidebar onSOSClick={() => setIsSOSModalOpen(true)} />
       
-      <main className="flex-1 md:ml-64 p-4 md:p-8">
+      <main className="flex-1 md:ml-64 p-3 md:p-6 lg:p-8 pb-safe mobile-scroll">
         {/* Page Header with Personal Touch */}
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+        <div className="mb-6 md:mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
             <div>
               <Badge variant="outline" className="mb-2 bg-indigo-50 text-indigo-600 border-indigo-200 font-normal">
                 {dailyStreak} Day Streak 🔥
               </Badge>
-              <h1 className="font-display font-bold text-3xl text-gradient bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-indigo-700 mb-2">
+              <h1 className="font-display font-bold text-xl md:text-2xl lg:text-3xl text-gradient bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-indigo-700 mb-2 leading-tight">
                 Your Meditation Space
               </h1>
-              <p className="text-neutral-600 max-w-xl">
+              <p className="text-neutral-600 max-w-xl text-sm md:text-base">
                 A few minutes of mindfulness can transform your entire day. What would feel good right now?
               </p>
             </div>
             
             {/* Progress Card */}
-            <Card className="bg-white border-indigo-100 shadow-sm p-3 flex items-center gap-4 w-full md:w-auto">
+            <Card className="bg-white border-indigo-100 shadow-sm p-3 flex items-center gap-4 w-full lg:w-auto touch-manipulation">
               <div className="rounded-full bg-indigo-100 p-2">
                 <Award className="h-6 w-6 text-indigo-600" />
               </div>
@@ -359,7 +359,7 @@ export default function MeditatePage() {
           </div>
           
           {/* Quick Mood Selector */}
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             <p className="text-sm text-neutral-600 mb-3">How are you feeling today?</p>
             <div className="flex flex-wrap gap-2">
               {moodOptions.map(mood => (
@@ -367,7 +367,7 @@ export default function MeditatePage() {
                   key={mood.label}
                   onClick={() => setCurrentMood(mood.label)}
                   className={`
-                    px-4 py-2 rounded-full border text-sm font-medium transition-all
+                    px-3 md:px-4 py-2 rounded-full border text-xs md:text-sm font-medium transition-all touch-manipulation
                     ${currentMood === mood.label ? mood.color : 'bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50'}
                   `}
                 >

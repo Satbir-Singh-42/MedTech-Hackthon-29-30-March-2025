@@ -187,26 +187,26 @@ export default function DashboardPage() {
     <div className="min-h-screen flex flex-col md:flex-row bg-neutral-50">
       <Sidebar onSOSClick={() => setIsSOSModalOpen(true)} />
       
-      <main className="flex-1 md:ml-64 p-4 md:p-8">
+      <main className="flex-1 md:ml-64 p-3 md:p-6 lg:p-8 pb-safe mobile-scroll">
         {/* Welcome Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-          <div>
-            <div className="flex items-center mb-2">
-              <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-medium mr-3">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center mb-2 gap-2">
+              <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-medium">
                 {streak} Day Streak
               </span>
-              <span className="text-neutral-500 text-sm">{format(new Date(), "EEEE, MMMM d")}</span>
+              <span className="text-neutral-500 text-xs md:text-sm">{format(new Date(), "EEEE, MMMM d")}</span>
             </div>
-            <h1 className="font-display font-bold text-2xl md:text-3xl text-gradient bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-indigo-700">
+            <h1 className="font-display font-bold text-xl md:text-2xl lg:text-3xl text-gradient bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-indigo-700 leading-tight">
               {getGreeting()}, {user?.firstName || "Friend"}!
             </h1>
           </div>
           
-          <div className="flex space-x-4">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
             <Button 
               onClick={() => navigate("/meditate")}
               variant="outline"
-              className="border-2 border-purple-200 text-purple-700 font-medium rounded-lg flex items-center"
+              className="border-2 border-purple-200 text-purple-700 font-medium rounded-lg flex items-center justify-center w-full sm:w-auto touch-manipulation"
             >
               <Leaf className="w-4 h-4 mr-2" />
               Meditate
@@ -214,9 +214,9 @@ export default function DashboardPage() {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8 space-mobile-friendly">
           {/* Mood Tracker Card */}
-          <Card className="lg:col-span-2 shadow-md hover:shadow-lg transition-shadow border-purple-100 overflow-hidden">
+          <Card className="lg:col-span-2 shadow-md hover:shadow-lg transition-shadow border-purple-100 overflow-hidden touch-manipulation">
             <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50 border-b border-purple-100 pb-3">
               <div className="flex items-center justify-between">
                 <div>
@@ -234,13 +234,13 @@ export default function DashboardPage() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               {isLoadingMoodEntries ? (
-                <div className="h-64 w-full flex items-center justify-center">
+                <div className="h-48 md:h-64 w-full flex items-center justify-center">
                   <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
                 </div>
               ) : (
-                <div className="h-64 w-full">
+                <div className="h-48 md:h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 10 }}>
                       <defs>
@@ -330,7 +330,7 @@ export default function DashboardPage() {
         </div>
         
         {/* Stats and Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Stats Card */}
           <Card className="md:col-span-1 border-purple-100 shadow-md hover:shadow-lg transition-shadow">
             <CardHeader className="bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-indigo-100 pb-3">

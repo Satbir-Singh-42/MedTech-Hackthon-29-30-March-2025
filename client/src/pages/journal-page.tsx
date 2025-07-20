@@ -39,6 +39,8 @@ import {
 } from "@/components/ui/tabs";
 import { JournalEntry, Mood } from "@/types";
 import { format } from "date-fns";
+import Sidebar from "@/components/layout/sidebar";
+import SOSModal from "@/components/modals/sos-modal";
 
 const journalFormSchema = z.object({
   title: z
@@ -99,6 +101,7 @@ export default function JournalPage() {
   const { toast } = useToast();
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(mockJournalEntries);
   const [activeTab, setActiveTab] = useState("view");
+  const [isSOSModalOpen, setIsSOSModalOpen] = useState(false);
 
   const form = useForm<JournalFormValues>({
     resolver: zodResolver(journalFormSchema),
@@ -131,24 +134,27 @@ export default function JournalPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-primary-600">My Journal</h1>
-        <nav className="flex space-x-4">
-          <button 
-            className={`px-4 py-2 rounded-lg transition-colors ${activeTab === 'view' ? 'bg-primary-100 text-primary-600' : 'text-neutral-600 hover:bg-neutral-50'}`}
-            onClick={() => setActiveTab('view')}
-          >
-            All Entries
-          </button>
-          <button 
-            className={`px-4 py-2 rounded-lg transition-colors ${activeTab === 'create' ? 'bg-primary-100 text-primary-600' : 'text-neutral-600 hover:bg-neutral-50'}`}
-            onClick={() => setActiveTab('create')}
-          >
-            New Entry
-          </button>
-        </nav>
-      </div>
+    <div className="min-h-screen flex flex-col md:flex-row bg-neutral-50">
+      <Sidebar onSOSClick={() => setIsSOSModalOpen(true)} />
+      
+      <main className="flex-1 md:ml-64 p-3 md:p-6 lg:p-8 pb-safe mobile-scroll">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 md:mb-8 gap-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-purple-600">My Journal</h1>
+          <nav className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <button 
+              className={`px-4 py-2 rounded-lg transition-colors touch-manipulation text-responsive-sm ${activeTab === 'view' ? 'bg-purple-100 text-purple-600' : 'text-neutral-600 hover:bg-neutral-50'}`}
+              onClick={() => setActiveTab('view')}
+            >
+              All Entries
+            </button>
+            <button 
+              className={`px-4 py-2 rounded-lg transition-colors touch-manipulation text-responsive-sm ${activeTab === 'create' ? 'bg-purple-100 text-purple-600' : 'text-neutral-600 hover:bg-neutral-50'}`}
+              onClick={() => setActiveTab('create')}
+            >
+              New Entry
+            </button>
+          </nav>
+        </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         {/* Tabs list hidden since we're using the custom navbar */}
@@ -157,31 +163,31 @@ export default function JournalPage() {
           <TabsTrigger value="create">New Entry</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="view" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <TabsContent value="view" className="space-y-4 md:space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {journalEntries.map((entry) => (
-              <Card key={entry.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+              <Card key={entry.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 touch-manipulation">
                 <CardHeader className="pb-3">
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="text-xl">{entry.title}</CardTitle>
+                  <div className="flex justify-between items-start gap-2">
+                    <CardTitle className="text-lg md:text-xl leading-tight flex-1 min-w-0">{entry.title}</CardTitle>
                     {entry.mood && (
-                      <span className="text-2xl" title={moods.find(m => m.id === entry.mood)?.label || ""}>
+                      <span className="text-xl md:text-2xl flex-shrink-0" title={moods.find(m => m.id === entry.mood)?.label || ""}>
                         {moods.find(m => m.id === entry.mood)?.emoji}
                       </span>
                     )}
                   </div>
-                  <CardDescription>
-                    {format(new Date(entry.createdAt), "MMMM d, yyyy 'at' h:mm a")}
+                  <CardDescription className="text-xs md:text-sm">
+                    {format(new Date(entry.createdAt), "MMM d, yyyy 'at' h:mm a")}
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-neutral-700 line-clamp-3">{entry.content}</p>
+                <CardContent className="p-4">
+                  <p className="text-neutral-700 line-clamp-3 text-sm md:text-base leading-relaxed">{entry.content}</p>
                 </CardContent>
-                <CardFooter className="pt-2 flex flex-wrap gap-2">
+                <CardFooter className="pt-2 flex flex-wrap gap-1 md:gap-2 p-4">
                   {entry.tags && entry.tags.map((tag) => (
                     <span 
                       key={tag} 
-                      className="bg-primary-50 text-primary-600 text-xs px-2 py-1 rounded-full"
+                      className="bg-purple-50 text-purple-600 text-xs px-2 py-1 rounded-full"
                     >
                       #{tag}
                     </span>
@@ -203,10 +209,10 @@ export default function JournalPage() {
         </TabsContent>
 
         <TabsContent value="create">
-          <Card>
+          <Card className="touch-manipulation">
             <CardHeader>
-              <CardTitle>Create a New Journal Entry</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-lg md:text-xl">Create a New Journal Entry</CardTitle>
+              <CardDescription className="text-sm md:text-base">
                 Record your thoughts, feelings, and experiences for reflection.
               </CardDescription>
             </CardHeader>
@@ -307,6 +313,9 @@ export default function JournalPage() {
           </Card>
         </TabsContent>
       </Tabs>
+      
+      <SOSModal isOpen={isSOSModalOpen} onClose={() => setIsSOSModalOpen(false)} />
+      </main>
     </div>
   );
 }

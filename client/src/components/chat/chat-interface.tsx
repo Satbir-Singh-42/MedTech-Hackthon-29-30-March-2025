@@ -137,9 +137,9 @@ export default function ChatInterface({
   ];
 
   return (
-    <main className="flex-1 md:ml-64 bg-gradient-to-b from-indigo-50/50 to-white flex flex-col h-screen">
+    <main className="flex-1 md:ml-64 bg-gradient-to-b from-indigo-50/50 to-white flex flex-col min-h-screen">
       {/* Chat Header */}
-      <div className="bg-white p-4 border-b border-indigo-100 flex items-center justify-between shadow-sm">
+      <div className="bg-white p-3 md:p-4 border-b border-indigo-100 flex items-center justify-between shadow-sm sticky top-0 z-30">
         <div className="flex items-center">
           <div className="w-11 h-11 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center shadow-inner">
             <Sparkles className="h-5 w-5 text-white" />
@@ -210,7 +210,7 @@ export default function ChatInterface({
       )}
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-3 md:p-6 pb-safe">
         {messages.map((message, index) => (
           <div 
             key={message.id} 
@@ -225,10 +225,10 @@ export default function ChatInterface({
             <div 
               className={`
                 ${message.sender === 'ai' 
-                  ? 'ml-3 bg-white rounded-t-2xl rounded-br-2xl rounded-bl-lg border border-indigo-100 shadow-sm' 
-                  : 'mr-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-t-2xl rounded-bl-2xl rounded-br-lg shadow-md'
+                  ? 'ml-2 md:ml-3 bg-white rounded-t-2xl rounded-br-2xl rounded-bl-lg border border-indigo-100 shadow-sm' 
+                  : 'mr-2 md:mr-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-t-2xl rounded-bl-2xl rounded-br-lg shadow-md'
                 } 
-                p-4 max-w-md transition-all duration-300 hover:shadow-md
+                p-3 md:p-4 max-w-[280px] sm:max-w-md transition-all duration-300 hover:shadow-md
               `}
             >
               {/* Message with proper spacing for line breaks */}
@@ -325,7 +325,7 @@ export default function ChatInterface({
       )}
 
       {/* Chat Input */}
-      <div className="bg-white p-4 border-t border-indigo-100 shadow-sm">
+      <div className="bg-white p-3 md:p-4 border-t border-indigo-100 shadow-sm sticky bottom-0 pb-safe">
         <div className="flex items-center">
           <button 
             className="text-neutral-500 hover:text-indigo-600 transition-colors duration-300 mr-3 rounded-full p-2 hover:bg-indigo-50"
