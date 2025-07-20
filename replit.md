@@ -19,6 +19,16 @@ A full-stack mental health and wellness application with mood tracking, AI chat 
 - Secure session management
 
 ## Recent Changes
+- **2025-01-20 - Demo Account & Authentication Setup**: 
+  - Added comprehensive demo account with dummy data (username: demo, password: demo123)
+  - Created sample mood entries for demo user spanning multiple days
+  - Added demo chat conversation history to showcase AI features
+  - Made demo credentials visible on home page for easy access
+  - Ensured new user accounts start with clean, empty data
+  - Updated demo user email to match SereneAI branding
+  - Added chat message storage and retrieval endpoints
+  - Implemented proper user data isolation between accounts
+
 - **2025-01-20 - Home Page Redesign**: 
   - Redesigned home page to be compact and professional
   - Reduced hero section height and simplified content

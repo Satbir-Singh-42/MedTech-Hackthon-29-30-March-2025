@@ -27,7 +27,7 @@ export class MemStorage implements IStorage {
       password: "demo123", // In real app, this should be hashed
       firstName: "Demo",
       lastName: "User",
-      email: "demo@mindfulai.com",
+      email: "demo@sereneai.com",
       createdAt: new Date()
     };
     this.users.set(demoUser.id, demoUser);

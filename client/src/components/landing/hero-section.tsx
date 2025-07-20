@@ -61,14 +61,19 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
                 <Sparkles className="w-4 h-4 ml-2" />
               </Button>
               
-              <Button
-                onClick={onDemoLogin}
-                variant="outline"
-                size="lg"
-                className="px-8 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300"
-              >
-                Try Demo
-              </Button>
+              <div className="text-center">
+                <Button
+                  onClick={onDemoLogin}
+                  variant="outline"
+                  size="lg"
+                  className="px-8 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300"
+                >
+                  Try Demo
+                </Button>
+                <p className="text-white/60 text-sm mt-2">
+                  Username: demo | Password: demo123
+                </p>
+              </div>
             </div>
           </div>
         </div>
