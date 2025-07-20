@@ -9,29 +9,23 @@ import Footer from "@/components/landing/footer";
 import LoginModal from "@/components/modals/login-modal";
 import SignupModal from "@/components/modals/signup-modal-new";
 import { useAuth } from "@/hooks/use-auth";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+
 
 export default function HomePage() {
   const [location, navigate] = useLocation();
-  const { user } = useAuth();
+  const { user, loginMutation } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
   // Demo login functionality
-  const demoLoginMutation = useMutation({
-    mutationFn: () => apiRequest("/api/auth/login", "POST", {
+  const handleDemoLogin = () => {
+    loginMutation.mutate({
       username: "demo",
       password: "demo123"
-    }),
-    onSuccess: () => {
-      navigate("/dashboard");
-    },
-  });
-
-  const handleDemoLogin = () => {
-    demoLoginMutation.mutate();
+    });
   };
+
+
 
   const handleGetStarted = () => {
     setIsSignupModalOpen(true);

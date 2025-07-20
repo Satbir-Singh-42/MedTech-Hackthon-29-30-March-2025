@@ -257,11 +257,11 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                       <div className="space-y-1 leading-none">
                         <FormLabel className="text-gray-700 text-xs">
                           I agree to the{" "}
-                          <a href="#" className="text-purple-600 hover:text-purple-700 font-medium underline">
+                          <a href="#" className="text-violet-600 hover:text-violet-700 font-medium underline">
                             Terms
                           </a>{" "}
                           and{" "}
-                          <a href="#" className="text-purple-600 hover:text-purple-700 font-medium underline">
+                          <a href="#" className="text-violet-600 hover:text-violet-700 font-medium underline">
                             Privacy Policy
                           </a>
                         </FormLabel>
@@ -274,7 +274,7 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                 <Button 
                   type="submit" 
                   disabled={registerMutation.isPending}
-                  className="w-full h-9 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-medium rounded-md text-sm transition-all duration-200 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+                  className="w-full h-9 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 hover:from-violet-700 hover:via-purple-700 hover:to-indigo-800 text-white font-medium rounded-md text-sm transition-all duration-200 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
                 >
                   {registerMutation.isPending ? (
                     <>
@@ -294,7 +294,7 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                 Have an account?{" "}
                 <Button 
                   variant="link" 
-                  className="p-0 h-auto text-xs text-purple-600 hover:text-purple-700 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md"
+                  className="p-0 h-auto text-xs text-violet-600 hover:text-violet-700 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 rounded-md"
                   onClick={handleSwitchToLogin}
                 >
                   Sign in

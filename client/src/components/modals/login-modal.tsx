@@ -136,7 +136,7 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }: LoginModa
                 <Button 
                   type="submit" 
                   disabled={loginMutation.isPending}
-                  className="w-full h-9 sm:h-10 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-md text-sm transition-all duration-200 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+                  className="w-full h-9 sm:h-10 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 hover:from-violet-700 hover:via-purple-700 hover:to-indigo-800 text-white font-medium rounded-md text-sm transition-all duration-200 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
                 >
                   {loginMutation.isPending ? (
                     <>
@@ -156,7 +156,7 @@ export default function LoginModal({ isOpen, onClose, onSignupClick }: LoginModa
                 Don't have an account?{" "}
                 <Button 
                   variant="link" 
-                  className="p-0 h-auto text-xs text-purple-600 hover:text-purple-700 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md"
+                  className="p-0 h-auto text-xs text-violet-600 hover:text-violet-700 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 rounded-md"
                   onClick={handleSwitchToSignup}
                 >
                   Create one
