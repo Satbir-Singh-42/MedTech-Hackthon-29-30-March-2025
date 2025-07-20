@@ -103,13 +103,13 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
             <div className="flex items-center space-x-4">
               <Button 
                 variant="outline" 
-                className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-medium px-6"
+                className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-medium px-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
                 onClick={onLoginClick}
               >
                 Login
               </Button>
               <Button 
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium px-6 shadow-md"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium px-6 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
                 onClick={onSignupClick}
               >
                 Get Started
@@ -117,7 +117,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
             </div>
           </div>
           <button 
-            className="md:hidden text-gray-600"
+            className="md:hidden text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md p-1"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
@@ -154,7 +154,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
             <div className="space-y-3 pt-4 border-t border-gray-200">
               <Button 
                 variant="outline" 
-                className="w-full border-2 border-purple-600 text-purple-600 hover:bg-purple-50 py-3 font-medium"
+                className="w-full border-2 border-purple-600 text-purple-600 hover:bg-purple-50 py-3 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
                 onClick={() => {
                   onLoginClick();
                   setIsMobileMenuOpen(false);
@@ -163,7 +163,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
                 Login
               </Button>
               <Button 
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 font-medium"
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
                 onClick={() => {
                   onSignupClick();
                   setIsMobileMenuOpen(false);
