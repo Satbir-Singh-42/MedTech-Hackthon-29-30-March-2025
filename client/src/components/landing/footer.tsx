@@ -14,10 +14,10 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <span className="font-bold text-xl">MindfulAI</span>
+              <span className="font-bold text-xl">SereneAI</span>
             </div>
             <p className="text-gray-300 mb-6 max-w-md">
-              Your compassionate AI companion for mental wellness and emotional support.
+              Professional mental health platform powered by AI technology.
             </p>
           </div>
           
@@ -33,14 +33,14 @@ export default function Footer() {
           <div id="contact">
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <ul className="space-y-3">
-              <li><a href="mailto:support@mindfulai.com" className="text-gray-300 hover:text-white transition-colors duration-200">support@mindfulai.com</a></li>
+              <li><a href="mailto:support@sereneai.com" className="text-gray-300 hover:text-white transition-colors duration-200">support@sereneai.com</a></li>
               <li><span className="text-gray-300">Available 24/7</span></li>
             </ul>
           </div>
         </div>
         
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-          <p className="text-gray-400">&copy; {currentYear} MindfulAI. All rights reserved.</p>
+          <p className="text-gray-400">&copy; {currentYear} SereneAI. All rights reserved.</p>
         </div>
       </div>
     </footer>
