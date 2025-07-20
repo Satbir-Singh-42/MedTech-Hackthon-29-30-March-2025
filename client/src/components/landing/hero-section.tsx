@@ -55,7 +55,7 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
               <Button
                 onClick={onGetStarted}
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 font-semibold rounded-full shadow-lg transition-all duration-300"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 font-semibold rounded-full shadow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               >
                 Get Started
                 <Sparkles className="w-4 h-4 ml-2" />
@@ -65,7 +65,7 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
                 onClick={onDemoLogin}
                 variant="outline"
                 size="lg"
-                className="px-8 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300"
+                className="px-8 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
               >
                 Try Demo
               </Button>

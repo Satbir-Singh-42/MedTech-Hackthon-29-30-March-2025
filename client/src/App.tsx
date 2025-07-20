@@ -64,18 +64,21 @@ function BotpressScript() {
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={HomePage} />
-      <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/dashboard" component={DashboardPage} />
-      <ProtectedRoute path="/chat" component={ChatPage} />
-      <ProtectedRoute path="/meditate" component={MeditatePage} />
-      <ProtectedRoute path="/journal" component={JournalPage} />
-      <ProtectedRoute path="/collaborators" component={CollaboratorsPage} />
-      <ProtectedRoute path="/settings" component={SettingsPage} />
-      {/* Fallback to 404 */}
-      <Route component={NotFound} />
-    </Switch>
+    <div>
+      <BotpressScript />
+      <Switch>
+        <Route path="/" component={HomePage} />
+        <Route path="/auth" component={AuthPage} />
+        <ProtectedRoute path="/dashboard" component={DashboardPage} />
+        <ProtectedRoute path="/chat" component={ChatPage} />
+        <ProtectedRoute path="/meditate" component={MeditatePage} />
+        <ProtectedRoute path="/journal" component={JournalPage} />
+        <ProtectedRoute path="/collaborators" component={CollaboratorsPage} />
+        <ProtectedRoute path="/settings" component={SettingsPage} />
+        {/* Fallback to 404 */}
+        <Route component={NotFound} />
+      </Switch>
+    </div>
   );
 }
 
@@ -85,7 +88,6 @@ function App() {
       <AuthProvider>
         <div className="app min-h-screen bg-white">
           <Router />
-          <BotpressScript />
           <Toaster />
         </div>
       </AuthProvider>
