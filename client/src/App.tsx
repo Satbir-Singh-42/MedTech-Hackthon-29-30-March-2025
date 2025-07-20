@@ -83,7 +83,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <div className="app min-h-screen">
+        <div className="app min-h-screen bg-white">
           <Router />
           <BotpressScript />
           <Toaster />

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  * {
+  *:not(nav):not(body):not(html) {
     @apply border-border;
   }
 

@@ -15,7 +15,7 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
   };
 
   return (
-    <div className="relative min-h-[90vh] bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse" 
@@ -27,7 +27,7 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
       </div>
       
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center min-h-[90vh] pt-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center min-h-screen pt-20">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
           <div className="text-center lg:text-left space-y-6 lg:space-y-8">
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">

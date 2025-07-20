@@ -44,13 +44,13 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white overflow-x-hidden">
       <Navbar 
         onLoginClick={() => setIsLoginModalOpen(true)}
         onSignupClick={() => setIsSignupModalOpen(true)}
       />
       
-      <main className="pt-16">
+      <main>
         <HeroSection onGetStarted={handleGetStarted} onDemoLogin={handleDemoLogin} />
         <div className="py-16">
           <FeaturesSection />
