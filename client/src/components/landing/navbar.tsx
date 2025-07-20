@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
+import { Heart } from "lucide-react";
 
 interface NavbarProps {
   onLoginClick: () => void;
@@ -75,9 +76,7 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center space-x-3">
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-2 rounded-xl shadow-md">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
+              <Heart className="h-6 w-6 text-white fill-white" />
             </div>
             <span className="font-bold text-2xl text-gray-900">SereneAI</span>
           </Link>
