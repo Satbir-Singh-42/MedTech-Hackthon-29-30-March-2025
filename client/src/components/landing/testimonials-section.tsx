@@ -2,21 +2,18 @@ export default function TestimonialsSection() {
   const testimonials = [
     {
       id: 1,
-      name: "Jamie L.",
-      rating: 5,
-      text: "The daily check-ins and mood tracking have helped me identify patterns in my anxiety. The AI suggestions are surprisingly helpful and personalized."
+      name: "Sarah M.",
+      text: "MindfulAI has been a game-changer for my mental health journey. The personalized support feels genuine and helpful."
     },
     {
       id: 2,
-      name: "Alex T.",
-      rating: 5,
-      text: "The meditation sessions are perfect for my busy schedule. I love that they adapt based on my mood entries - it's like having a personal mindfulness coach."
+      name: "Alex R.",
+      text: "I love how the AI adapts to my needs. It's like having a supportive friend available 24/7."
     },
     {
       id: 3,
-      name: "Morgan P.",
-      rating: 4.5,
-      text: "As someone who was hesitant about therapy, this app has been a gentle introduction to managing my emotions. The privacy features make me feel safe."
+      name: "Jordan K.",
+      text: "The meditation features and mood tracking have helped me understand myself better than ever before."
     }
   ];
 
@@ -59,25 +56,27 @@ export default function TestimonialsSection() {
   };
 
   return (
-    <section className="py-16 bg-neutral-50">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="bg-gray-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="font-display font-bold text-3xl md:text-4xl text-neutral-800 mb-4">What Our Users Say</h2>
-          <p className="text-neutral-600 max-w-2xl mx-auto">Real experiences from people on their mental wellness journey.</p>
+          <h2 className="font-bold text-3xl md:text-4xl text-gray-900 mb-4">What Our Users Say</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">Real experiences from people on their mental wellness journey.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="bg-white p-6 rounded-xl shadow-sm">
+            <div key={testimonial.id} className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="flex items-center mb-4">
-                <div className="flex text-primary-400">
-                  {renderStars(testimonial.rating)}
+                <div className="flex text-yellow-400">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <svg key={star} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
                 </div>
               </div>
-              <p className="text-neutral-700 mb-4">"{testimonial.text}"</p>
-              <div className="flex items-center">
-                <span className="font-semibold text-neutral-800">{testimonial.name}</span>
-              </div>
+              <p className="text-gray-700 mb-6 leading-relaxed text-lg">"{testimonial.text}"</p>
+              <p className="font-semibold text-gray-900">— {testimonial.name}</p>
             </div>
           ))}
         </div>

@@ -9,12 +9,33 @@ import Footer from "@/components/landing/footer";
 import LoginModal from "@/components/modals/login-modal";
 import SignupModal from "@/components/modals/signup-modal-new";
 import { useAuth } from "@/hooks/use-auth";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function HomePage() {
   const [location, navigate] = useLocation();
   const { user } = useAuth();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+
+  // Demo login functionality
+  const demoLoginMutation = useMutation({
+    mutationFn: () => apiRequest("/api/auth/login", "POST", {
+      username: "demo",
+      password: "demo123"
+    }),
+    onSuccess: () => {
+      navigate("/dashboard");
+    },
+  });
+
+  const handleDemoLogin = () => {
+    demoLoginMutation.mutate();
+  };
+
+  const handleGetStarted = () => {
+    setIsSignupModalOpen(true);
+  };
 
   // If the user is already logged in, redirect to dashboard
   if (user) {
@@ -30,10 +51,14 @@ export default function HomePage() {
       />
       
       <main>
-        <HeroSection onGetStarted={() => setIsSignupModalOpen(true)} />
-        <FeaturesSection />
-        <TestimonialsSection />
-        <CTASection onGetStarted={() => setIsSignupModalOpen(true)} />
+        <HeroSection onGetStarted={handleGetStarted} onDemoLogin={handleDemoLogin} />
+        <div className="py-16">
+          <FeaturesSection />
+        </div>
+        <div className="py-16 bg-gray-50">
+          <TestimonialsSection />
+        </div>
+        <CTASection onGetStarted={handleGetStarted} />
       </main>
       
       <Footer />

@@ -59,8 +59,8 @@ export default function FeaturesSection() {
   ];
 
   return (
-    <section id="features" className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="features" className="bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="inline-flex items-center bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Zap className="w-4 h-4 mr-2" />

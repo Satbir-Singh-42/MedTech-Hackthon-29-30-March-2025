@@ -3,9 +3,10 @@ import { Heart, Shield, Users, Sparkles } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
+  onDemoLogin: () => void;
 }
 
-export default function HeroSection({ onGetStarted }: HeroSectionProps) {
+export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionProps) {
   const scrollToElement = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -26,9 +27,9 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
       </div>
       
-      <div className="container mx-auto px-4 md:px-6 relative z-10 flex items-center min-h-[90vh]">
-        <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
-          <div className="space-y-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center min-h-[90vh]">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
+          <div className="text-center lg:text-left space-y-6 lg:space-y-8">
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
               <Sparkles className="w-4 h-4 mr-2 text-pink-300" />
               <span className="text-white font-medium text-sm">
@@ -36,8 +37,8 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
               </span>
             </div>
             
-            <div className="space-y-6">
-              <h1 className="font-bold text-4xl md:text-6xl lg:text-7xl text-white leading-tight">
+            <div className="space-y-4 lg:space-y-6">
+              <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white leading-tight">
                 Your
                 <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                   {" "}Mental Health{" "}
@@ -45,7 +46,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
                 Journey Starts Here
               </h1>
               
-              <p className="text-gray-200 text-lg md:text-xl leading-relaxed max-w-lg">
+              <p className="text-gray-200 text-lg md:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0">
                 Experience compassionate AI support designed to help you navigate life's challenges with personalized guidance, mindfulness practices, and evidence-based mental health tools.
               </p>
             </div>
@@ -66,7 +67,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
               </div>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button
                 onClick={onGetStarted}
                 size="lg"
@@ -77,13 +78,21 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
               </Button>
               
               <Button
-                onClick={() => scrollToElement('features')}
+                onClick={onDemoLogin}
                 variant="outline"
                 size="lg"
                 className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300"
               >
-                Explore Features
+                Try Demo
+                <Heart className="w-5 h-5 ml-2" />
               </Button>
+            </div>
+            
+            {/* Demo hint */}
+            <div className="text-center lg:text-left">
+              <p className="text-white/60 text-sm">
+                Try our demo account to explore all features instantly
+              </p>
             </div>
           </div>
           

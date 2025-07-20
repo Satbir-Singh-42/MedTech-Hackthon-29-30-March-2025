@@ -26,90 +26,94 @@ export default function Navbar({ onLoginClick, onSignupClick }: NavbarProps) {
   };
 
   return (
-    <nav className="bg-white shadow-md py-4 border-b-2 border-primary">
-      <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
-        <Link href="/" className="flex items-center space-x-3">
-          <span className="bg-purple-600 text-white p-2.5 rounded-full shadow-md">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+    <nav className="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-200">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-2 rounded-xl shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </div>
+            <span className="font-bold text-2xl text-gray-900">MindfulAI</span>
+          </Link>
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <a 
+                key={item.href}
+                href={item.href} 
+                className="text-gray-600 hover:text-purple-600 transition-colors duration-200 font-medium"
+                onClick={handleNavLinkClick}
+              >
+                {item.label}
+              </a>
+            ))}
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="outline" 
+                className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-medium px-6"
+                onClick={onLoginClick}
+              >
+                Login
+              </Button>
+              <Button 
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium px-6 shadow-md"
+                onClick={onSignupClick}
+              >
+                Get Started
+              </Button>
+            </div>
+          </div>
+          <button 
+            className="md:hidden text-gray-600"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+          >
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
-          </span>
-          <span className="font-display font-bold text-2xl text-contrast-high">SereneAI</span>
-        </Link>
-        <div className="hidden md:flex items-center space-x-8">
-          {navItems.map((item) => (
-            <a 
-              key={item.href}
-              href={item.href} 
-              className="text-contrast-high hover:text-primary transition-colors duration-300 font-medium text-base"
-              onClick={handleNavLinkClick}
-            >
-              {item.label}
-            </a>
-          ))}
-          <Button 
-            variant="outline" 
-            className="border-2 border-primary text-primary hover:bg-blue-50 font-semibold"
-            onClick={onLoginClick}
-          >
-            Login
-          </Button>
-          <Button 
-            className="btn-contrast shadow-md"
-            onClick={onSignupClick}
-          >
-            Sign Up
-          </Button>
+          </button>
         </div>
-        <button 
-          className="md:hidden text-blue-800"
-          onClick={toggleMobileMenu}
-          aria-label="Toggle menu"
-        >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.536 5.879a1 1 0 001.415 0 3 3 0 014.242 0 1 1 0 001.415-1.415 5 5 0 00-7.072 0 1 1 0 000 1.415z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-        </button>
       </div>
       
       {/* Mobile Menu */}
-      <div className={`md:hidden bg-white absolute w-full z-50 shadow-lg transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0 overflow-hidden'}`}>
-        <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-          {navItems.map((item) => (
-            <a 
-              key={item.href}
-              href={item.href} 
-              className="text-contrast-high hover:text-primary transition-colors duration-300 py-2 text-lg font-medium"
-              onClick={handleNavLinkClick}
-            >
-              {item.label}
-            </a>
-          ))}
-          <div className="flex flex-col space-y-3 pt-3 border-t-2 border-neutral-100">
-            <Button 
-              variant="outline" 
-              className="w-full border-2 border-primary text-primary hover:bg-blue-50 py-6 font-semibold text-lg"
-              onClick={() => {
-                onLoginClick();
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Login
-            </Button>
-            <Button 
-              className="w-full btn-contrast py-6 text-lg font-semibold"
-              onClick={() => {
-                onSignupClick();
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Sign Up
-            </Button>
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
+          <div className="px-4 py-6 space-y-6">
+            {navItems.map((item) => (
+              <a 
+                key={item.href}
+                href={item.href} 
+                className="block text-gray-600 hover:text-purple-600 transition-colors duration-200 font-medium text-lg"
+                onClick={handleNavLinkClick}
+              >
+                {item.label}
+              </a>
+            ))}
+            <div className="space-y-3 pt-4 border-t border-gray-200">
+              <Button 
+                variant="outline" 
+                className="w-full border-2 border-purple-600 text-purple-600 hover:bg-purple-50 py-3 font-medium"
+                onClick={() => {
+                  onLoginClick();
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Login
+              </Button>
+              <Button 
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 font-medium"
+                onClick={() => {
+                  onSignupClick();
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Get Started
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }
