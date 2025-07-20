@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, Heart, ArrowRight, Check } from "lucide-react";
 import { insertUserSchema } from "@shared/schema";
 
 interface SignupModalProps {
@@ -88,13 +88,23 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">Create an Account</DialogTitle>
-          <DialogDescription className="text-center">
-            Start your mental wellness journey with MindfulAI
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="sm:max-w-2xl border-0 p-0 bg-transparent max-h-[90vh] overflow-y-auto">
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+          {/* Header with gradient */}
+          <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+              <Heart className="w-8 h-8 text-white" />
+            </div>
+            <DialogTitle className="text-3xl font-bold text-white mb-2">
+              Join MindfulAI
+            </DialogTitle>
+            <DialogDescription className="text-pink-100">
+              Begin your personalized mental wellness journey today
+            </DialogDescription>
+          </div>
+
+          {/* Form content */}
+          <div className="p-8">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -225,32 +235,39 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
             />
             <Button 
               type="submit" 
-              className="w-full py-6" 
               disabled={registerMutation.isPending}
+              className="w-full h-12 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold rounded-xl text-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg"
             >
               {registerMutation.isPending ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   Creating account...
                 </>
               ) : (
-                "Create Account"
+                <>
+                  Create Account
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </>
               )}
             </Button>
           </form>
         </Form>
-        <div className="mt-4 text-center">
-          <p className="text-neutral-500 text-sm">
+
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-gray-600 text-sm">
             Already have an account?{" "}
             <Button 
               variant="link" 
-              className="p-0 h-auto text-sm text-primary-500 hover:text-primary-600"
+              className="p-0 h-auto text-sm text-purple-600 hover:text-purple-700 font-medium"
               onClick={handleSwitchToLogin}
             >
-              Login
+              Sign in instead
             </Button>
           </p>
         </div>
+      </div>
+    </div>
       </DialogContent>
     </Dialog>
   );

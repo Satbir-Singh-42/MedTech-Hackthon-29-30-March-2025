@@ -7,7 +7,7 @@ import TestimonialsSection from "@/components/landing/testimonials-section";
 import CTASection from "@/components/landing/cta-section";
 import Footer from "@/components/landing/footer";
 import LoginModal from "@/components/modals/login-modal";
-import SignupModal from "@/components/modals/signup-modal";
+import SignupModal from "@/components/modals/signup-modal-new";
 import { useAuth } from "@/hooks/use-auth";
 
 export default function HomePage() {
