@@ -27,7 +27,7 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
       </div>
       
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center min-h-[90vh]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center min-h-[90vh] pt-8">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
           <div className="text-center lg:text-left space-y-6 lg:space-y-8">
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
