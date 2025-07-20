@@ -27,9 +27,9 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
       </div>
       
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center min-h-screen pt-20">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
-          <div className="text-center lg:text-left space-y-6 lg:space-y-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex items-center min-h-screen pt-20 pb-12">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full max-w-7xl mx-auto">
+          <div className="text-center lg:text-left space-y-8 lg:space-y-10 px-4 sm:px-0">
             <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
               <Sparkles className="w-4 h-4 mr-2 text-pink-300" />
               <span className="text-white font-medium text-sm">
@@ -37,8 +37,8 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
               </span>
             </div>
             
-            <div className="space-y-4 lg:space-y-6">
-              <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white leading-tight">
+            <div className="space-y-6 lg:space-y-8">
+              <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white leading-tight tracking-tight">
                 Your
                 <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                   {" "}Mental Health{" "}
@@ -46,32 +46,32 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
                 Journey Starts Here
               </h1>
               
-              <p className="text-gray-200 text-lg md:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0">
+              <p className="text-gray-200 text-lg md:text-xl xl:text-2xl leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Experience compassionate AI support designed to help you navigate life's challenges with personalized guidance, mindfulness practices, and evidence-based mental health tools.
               </p>
             </div>
 
             {/* Trust indicators */}
-            <div className="flex flex-wrap gap-6 text-white/80">
-              <div className="flex items-center">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-6 lg:gap-8 text-white/80">
+              <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
                 <Shield className="w-5 h-5 mr-2 text-green-400" />
                 <span className="text-sm font-medium">100% Private & Secure</span>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
                 <Heart className="w-5 h-5 mr-2 text-red-400" />
                 <span className="text-sm font-medium">Evidence-Based</span>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
                 <Users className="w-5 h-5 mr-2 text-blue-400" />
                 <span className="text-sm font-medium">Expert Approved</span>
               </div>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center lg:justify-start">
               <Button
                 onClick={onGetStarted}
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-10 py-4 text-lg font-semibold rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
               >
                 Begin Your Journey
                 <Sparkles className="w-5 h-5 ml-2" />
@@ -81,7 +81,7 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
                 onClick={onDemoLogin}
                 variant="outline"
                 size="lg"
-                className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300"
+                className="px-10 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/20 transition-all duration-300"
               >
                 Try Demo
                 <Heart className="w-5 h-5 ml-2" />
@@ -90,15 +90,15 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
             
             {/* Demo hint */}
             <div className="text-center lg:text-left">
-              <p className="text-white/60 text-sm">
+              <p className="text-white/60 text-base">
                 Try our demo account to explore all features instantly
               </p>
             </div>
           </div>
           
-          <div className="relative flex justify-center lg:justify-end">
+          <div className="relative flex justify-center lg:justify-end mt-12 lg:mt-0">
             {/* Main illustration container */}
-            <div className="relative w-full max-w-lg">
+            <div className="relative w-full max-w-lg lg:max-w-xl">
               {/* Floating cards */}
               <div className="absolute -top-8 -left-8 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 animate-bounce" style={{animationDuration: '3s'}}>
                 <div className="flex items-center space-x-3">

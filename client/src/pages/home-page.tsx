@@ -52,12 +52,12 @@ export default function HomePage() {
       
       <main>
         <HeroSection onGetStarted={handleGetStarted} onDemoLogin={handleDemoLogin} />
-        <div className="py-16">
+        <section className="py-16 lg:py-24">
           <FeaturesSection />
-        </div>
-        <div className="py-16 bg-gray-50">
+        </section>
+        <section className="py-16 lg:py-24 bg-gray-50">
           <TestimonialsSection />
-        </div>
+        </section>
         <CTASection onGetStarted={handleGetStarted} />
       </main>
       
