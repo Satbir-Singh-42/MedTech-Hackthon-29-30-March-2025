@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+  
+  /* Gradient text styles */
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  /* Enhanced contrast styles */
+  .text-contrast-high {
+    @apply text-neutral-900 font-semibold;
+  }
+  
+  .text-contrast-medium {
+    @apply text-neutral-800 font-medium;
+  }
+  
+  .bg-contrast-card {
+    @apply bg-white shadow-md border border-neutral-300;
+  }
+  
+  .border-contrast {
+    @apply border-2 border-primary;
+  }
+  
+  /* Button with higher contrast */
+  .btn-contrast {
+    @apply bg-primary text-white font-semibold shadow-md transition-all duration-300;
+  }
+  
+  /* Input with better focus state */
+  .input-contrast:focus {
+    @apply ring-2 ring-primary border-primary outline-none;
+  }
+  
+  /* Links with better contrast */
+  .link-contrast {
+    @apply text-primary hover:underline font-medium;
+  }
+  
+  /* Heading with better contrast */
+  .heading-contrast {
+    @apply text-neutral-900 font-bold leading-tight;
+  }
+  
+  /* Cards with better contrast */
+  .card-contrast {
+    @apply bg-white border-2 border-neutral-200 shadow-lg rounded-xl p-6;
+  }
+  
+  /* Focus outline for better accessibility */
+  .focus-outline:focus {
+    @apply outline-none ring-2 ring-primary ring-offset-2;
+  }
+  
+  /* Button focus styles */
+  button:focus, a:focus, input:focus, select:focus, textarea:focus {
+    @apply outline-none ring-2 ring-primary ring-offset-1;
+  }
+}
