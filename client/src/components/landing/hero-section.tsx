@@ -45,11 +45,21 @@ export default function HeroSection({ onGetStarted, onDemoLogin }: HeroSectionPr
               Platform
             </h1>
             
-            <p className="text-gray-200 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-8">
+            <p className="text-gray-200 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-6">
               AI-powered mental health support with mood tracking, meditation, and professional collaboration tools.
             </p>
 
-
+            {/* Demo credentials */}
+            <div className="inline-flex items-center bg-white/10 backdrop-blur-sm px-4 py-3 rounded-lg border border-white/20 mb-8">
+              <div className="text-center">
+                <p className="text-white text-sm font-medium mb-1">
+                  Try the demo with these credentials:
+                </p>
+                <p className="text-pink-300 text-sm font-mono">
+                  Username: <span className="font-bold">demo</span> | Password: <span className="font-bold">demo123</span>
+                </p>
+              </div>
+            </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
