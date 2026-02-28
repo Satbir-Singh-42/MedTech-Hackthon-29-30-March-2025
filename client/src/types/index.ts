@@ -36,6 +36,7 @@ export interface Meditation {
   };
   category: string;
   videoUrl?: string; // Optional video URL for meditation videos
+  youtubeUrl?: string; // Optional YouTube embed URL
 }
 
 export interface MeditationCategory {

@@ -2,9 +2,9 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Express } from "express";
 import session from "express-session";
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
-import { promisify } from "util";
+import { randomBytes } from "crypto";
 import { storage } from "./storage";
+import { hashPassword, comparePasswords } from "./password";
 import { User as SelectUser } from "@shared/schema";
 
 declare global {
@@ -13,30 +13,25 @@ declare global {
   }
 }
 
-const scryptAsync = promisify(scrypt);
-
-async function hashPassword(password: string) {
-  const salt = randomBytes(16).toString("hex");
-  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `${buf.toString("hex")}.${salt}`;
-}
-
-async function comparePasswords(supplied: string, stored: string) {
-  const [hashed, salt] = stored.split(".");
-  const hashedBuf = Buffer.from(hashed, "hex");
-  const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
-  return timingSafeEqual(hashedBuf, suppliedBuf);
-}
-
 export function setupAuth(app: Express) {
+  // Generate a random secret if none provided (stable for this process lifetime)
+  const sessionSecret =
+    process.env.SESSION_SECRET || randomBytes(32).toString("hex");
+
+  if (!process.env.SESSION_SECRET) {
+    console.warn(
+      "⚠  SESSION_SECRET not set – using a random secret. Sessions will not survive restarts.",
+    );
+  }
+
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "sereneai-secret-key",
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
-    cookie: { 
+    cookie: {
       secure: process.env.NODE_ENV === "production",
-      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
-    }
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    },
   };
 
   app.set("trust proxy", 1);
@@ -48,20 +43,9 @@ export function setupAuth(app: Express) {
     new LocalStrategy(async (username, password, done) => {
       try {
         const user = await storage.getUserByUsername(username);
-        if (!user) {
+        if (!user || !(await comparePasswords(password, user.password))) {
           return done(null, false);
         }
-        
-        // Special case for demo user with plain text password
-        if (username === "demo" && password === "demo123") {
-          return done(null, user);
-        }
-        
-        // For other users, use hashed password comparison
-        if (!(await comparePasswords(password, user.password))) {
-          return done(null, false);
-        }
-        
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -93,7 +77,8 @@ export function setupAuth(app: Express) {
 
       req.login(user, (err) => {
         if (err) return next(err);
-        res.status(201).json(user);
+        const { password, ...safeUser } = user;
+        res.status(201).json(safeUser);
       });
     } catch (error) {
       next(error);
@@ -101,14 +86,17 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/auth/login", (req, res, next) => {
-    passport.authenticate("local", (err, user) => {
+    passport.authenticate("local", (err: any, user: any) => {
       if (err) return next(err);
       if (!user) {
-        return res.status(401).json({ message: "Invalid username or password" });
+        return res
+          .status(401)
+          .json({ message: "Invalid username or password" });
       }
       req.login(user, (err) => {
         if (err) return next(err);
-        return res.status(200).json(user);
+        const { password, ...safeUser } = user;
+        return res.status(200).json(safeUser);
       });
     })(req, res, next);
   });
@@ -122,6 +110,7 @@ export function setupAuth(app: Express) {
 
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
-    res.json(req.user);
+    const { password, ...safeUser } = req.user as any;
+    res.json(safeUser);
   });
 }

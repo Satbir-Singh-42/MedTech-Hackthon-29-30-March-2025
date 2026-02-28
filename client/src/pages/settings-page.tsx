@@ -2,34 +2,50 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Sidebar from "@/components/layout/sidebar";
 import SOSModal from "@/components/modals/sos-modal";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { Loader2, Trash2, UserPlus, Shield, Bell, CreditCard, Users } from "lucide-react";
+
+// -- Schemas ---------------------------------------------------------------
 
 const profileFormSchema = z.object({
-  firstName: z.string().min(2, {
-    message: "First name must be at least 2 characters.",
-  }),
-  lastName: z.string().min(2, {
-    message: "Last name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Please enter a valid email"),
   phone: z.string().optional(),
-  bio: z.string().max(500, {
-    message: "Bio must not be longer than 500 characters.",
-  }).optional(),
+  bio: z.string().max(500, "Bio must not exceed 500 characters").optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
+const contactSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  relationship: z.string().optional(),
+  phone: z.string().optional(),
+  email: z.string().email().optional().or(z.literal("")),
+});
+
+type ContactFormValues = z.infer<typeof contactSchema>;
+
+// -- Component -------------------------------------------------------------
 
 export default function SettingsPage() {
   const { user } = useAuth();
@@ -37,189 +53,207 @@ export default function SettingsPage() {
   const [isSOSModalOpen, setIsSOSModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
 
-  // Default values for the form
-  const defaultValues: Partial<ProfileFormValues> = {
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    email: user?.email || "",
-    phone: "",
-    bio: "",
-  };
+  // -- Profile form --------------------------------------------------------
 
-  const form = useForm<ProfileFormValues>({
+  const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
+    defaultValues: {
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      phone: (user as any)?.phone || "",
+      bio: (user as any)?.bio || "",
+    },
   });
 
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: "Profile updated",
-      description: "Your profile has been updated successfully.",
-    });
-  }
+  const profileMutation = useMutation({
+    mutationFn: async (data: ProfileFormValues) => {
+      const res = await apiRequest("PATCH", "/api/profile", data);
+      return res.json();
+    },
+    onSuccess: (updated) => {
+      queryClient.setQueryData(["/api/user"], updated);
+      toast({ title: "Profile updated", description: "Your changes have been saved." });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to update profile.", variant: "destructive" });
+    },
+  });
+
+  // -- Emergency contacts --------------------------------------------------
+
+  const { data: contacts = [], isLoading: contactsLoading } = useQuery<any[]>({
+    queryKey: ["/api/emergency-contacts"],
+  });
+
+  const contactForm = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { name: "", relationship: "", phone: "", email: "" },
+  });
+
+  const addContactMutation = useMutation({
+    mutationFn: async (data: ContactFormValues) => {
+      const res = await apiRequest("POST", "/api/emergency-contacts", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/emergency-contacts"] });
+      contactForm.reset();
+      toast({ title: "Contact added", description: "Emergency contact saved." });
+    },
+    onError: () => {
+      toast({ title: "Error", description: "Failed to add contact.", variant: "destructive" });
+    },
+  });
+
+  const deleteContactMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/emergency-contacts/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/emergency-contacts"] });
+      toast({ title: "Contact removed" });
+    },
+  });
+
+  // -- Tab styling ---------------------------------------------------------
+
+  const tabClass =
+    "data-[state=active]:border-b-2 data-[state=active]:border-purple-600 data-[state=active]:text-purple-700 data-[state=active]:shadow-none px-4 py-3 rounded-none border-b-2 border-transparent text-sm";
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       <Sidebar onSOSClick={() => setIsSOSModalOpen(true)} />
-      
+
       <main className="flex-1 md:ml-64 p-4 md:p-8">
         <div className="mb-6">
-          <h1 className="font-display font-bold text-2xl text-neutral-800 mb-2">Account Settings</h1>
-          <p className="text-neutral-600">Manage your profile, privacy, and application preferences.</p>
+          <h1 className="font-bold text-2xl text-neutral-800 mb-1">Account Settings</h1>
+          <p className="text-neutral-600 text-sm">
+            Manage your profile, contacts &amp; preferences.
+          </p>
         </div>
 
-        {/* Settings Tabs */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <Tabs defaultValue="profile" value={activeTab} onValueChange={setActiveTab}>
-            <div className="border-b border-neutral-100">
+            <div className="border-b border-neutral-100 overflow-x-auto">
               <TabsList className="bg-transparent border-b-0 h-auto">
-                <TabsTrigger 
-                  value="profile" 
-                  className="data-[state=active]:border-b-2 data-[state=active]:border-primary-500 data-[state=active]:text-primary-600 data-[state=active]:shadow-none px-6 py-3 rounded-none border-b-2 border-transparent"
-                >
-                  Profile
+                <TabsTrigger value="profile" className={tabClass}>
+                  <Shield className="h-4 w-4 mr-1.5" /> Profile
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="notifications" 
-                  className="data-[state=active]:border-b-2 data-[state=active]:border-primary-500 data-[state=active]:text-primary-600 data-[state=active]:shadow-none px-6 py-3 rounded-none border-b-2 border-transparent"
-                >
-                  Notifications
+                <TabsTrigger value="notifications" className={tabClass}>
+                  <Bell className="h-4 w-4 mr-1.5" /> Notifications
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="privacy" 
-                  className="data-[state=active]:border-b-2 data-[state=active]:border-primary-500 data-[state=active]:text-primary-600 data-[state=active]:shadow-none px-6 py-3 rounded-none border-b-2 border-transparent"
-                >
-                  Privacy
+                <TabsTrigger value="emergency" className={tabClass}>
+                  <Users className="h-4 w-4 mr-1.5" /> Emergency
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="emergency" 
-                  className="data-[state=active]:border-b-2 data-[state=active]:border-primary-500 data-[state=active]:text-primary-600 data-[state=active]:shadow-none px-6 py-3 rounded-none border-b-2 border-transparent"
-                >
-                  Emergency Contacts
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="subscription" 
-                  className="data-[state=active]:border-b-2 data-[state=active]:border-primary-500 data-[state=active]:text-primary-600 data-[state=active]:shadow-none px-6 py-3 rounded-none border-b-2 border-transparent"
-                >
-                  Subscription
+                <TabsTrigger value="subscription" className={tabClass}>
+                  <CreditCard className="h-4 w-4 mr-1.5" /> Plan
                 </TabsTrigger>
               </TabsList>
             </div>
 
+            {/* Profile Tab */}
             <TabsContent value="profile" className="p-6">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/3 mb-6 md:mb-0 md:pr-6">
-                  <h2 className="font-display font-semibold text-lg text-neutral-800 mb-2">Your Profile</h2>
-                  <p className="text-neutral-600 text-sm">Update your personal information and how others see you on the platform.</p>
-                </div>
-                <div className="md:w-2/3">
-                  <div className="mb-6 flex flex-col items-center sm:flex-row sm:items-start">
-                    <div className="relative mb-4 sm:mb-0 sm:mr-6">
-                      <div className="w-24 h-24 rounded-full bg-neutral-200 flex items-center justify-center overflow-hidden">
-                        <span className="text-2xl text-neutral-600">
-                          {user?.firstName?.charAt(0) || ""}
-                          {user?.lastName?.charAt(0) || ""}
-                        </span>
-                      </div>
-                      <button className="absolute bottom-0 right-0 bg-primary-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:bg-primary-600 transition-colors duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </button>
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="md:w-1/3">
+                  <h2 className="font-semibold text-lg text-neutral-800 mb-2">Your Profile</h2>
+                  <p className="text-neutral-600 text-sm">
+                    Update personal info visible on your account.
+                  </p>
+                  <div className="mt-4 flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center text-xl font-bold text-purple-700">
+                      {user?.firstName?.charAt(0) || ""}
+                      {user?.lastName?.charAt(0) || ""}
                     </div>
-                    <div className="text-center sm:text-left">
-                      <h3 className="font-display font-semibold text-neutral-800 mb-1">
+                    <div>
+                      <p className="font-medium text-neutral-800">
                         {user?.firstName} {user?.lastName}
-                      </h3>
-                      <p className="text-neutral-600 text-sm mb-3">Free Plan</p>
-                      <Button variant="outline" className="bg-primary-50 text-primary-600 border-primary-100 hover:bg-primary-100">
-                        Upgrade to Premium
-                      </Button>
+                      </p>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 capitalize">
+                        {(user as any)?.accountType || "free"} plan
+                      </span>
                     </div>
                   </div>
-                  
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                </div>
+
+                <div className="md:w-2/3">
+                  <Form {...profileForm}>
+                    <form
+                      onSubmit={profileForm.handleSubmit((data) => profileMutation.mutate(data))}
+                      className="space-y-5"
+                    >
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField
-                          control={form.control}
+                          control={profileForm.control}
                           name="firstName"
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>First Name</FormLabel>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
+                              <FormControl><Input {...field} /></FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={form.control}
+                          control={profileForm.control}
                           name="lastName"
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Last Name</FormLabel>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
+                              <FormControl><Input {...field} /></FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={form.control}
+                          control={profileForm.control}
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email Address</FormLabel>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl><Input type="email" {...field} /></FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                         <FormField
-                          control={form.control}
+                          control={profileForm.control}
                           name="phone"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Phone Number</FormLabel>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
+                              <FormLabel>Phone</FormLabel>
+                              <FormControl><Input {...field} /></FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
                       </div>
                       <FormField
-                        control={form.control}
+                        control={profileForm.control}
                         name="bio"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>About Me</FormLabel>
                             <FormControl>
-                              <Textarea 
-                                placeholder="Tell us a bit about yourself..." 
-                                className="resize-none" 
-                                {...field} 
+                              <Textarea
+                                placeholder="A short bio..."
+                                className="resize-none"
+                                {...field}
                               />
                             </FormControl>
-                            <FormDescription>
-                              This will be displayed on your profile.
-                            </FormDescription>
+                            <FormDescription>Max 500 characters.</FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      <div className="flex justify-end">
-                        <Button type="button" variant="outline" className="mr-3">
+                      <div className="flex justify-end gap-3">
+                        <Button type="button" variant="outline" onClick={() => profileForm.reset()}>
                           Cancel
                         </Button>
-                        <Button type="submit">
+                        <Button type="submit" disabled={profileMutation.isPending}>
+                          {profileMutation.isPending && (
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          )}
                           Save Changes
                         </Button>
                       </div>
@@ -229,340 +263,180 @@ export default function SettingsPage() {
               </div>
             </TabsContent>
 
-            <TabsContent value="notifications">
-              <div className="p-6">
-                <h2 className="font-display font-semibold text-lg text-neutral-800 mb-4">Notification Settings</h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
+            {/* Notifications Tab */}
+            <TabsContent value="notifications" className="p-6">
+              <h2 className="font-semibold text-lg text-neutral-800 mb-4">Notification Preferences</h2>
+              <div className="space-y-5 max-w-lg">
+                {[
+                  { title: "Daily Mood Reminders", desc: "Receive a daily reminder to log your mood", defaultOn: true },
+                  { title: "Meditation Recommendations", desc: "Suggestions based on your mood patterns", defaultOn: true },
+                  { title: "Weekly Progress Reports", desc: "Insights about your weekly mood trends", defaultOn: true },
+                  { title: "Professional Recommendations", desc: "Updates about new therapists", defaultOn: false },
+                ].map((item) => (
+                  <div key={item.title} className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium text-neutral-800">Daily Mood Reminders</h3>
-                      <p className="text-sm text-neutral-600">Receive a daily reminder to log your mood</p>
+                      <h3 className="font-medium text-neutral-800">{item.title}</h3>
+                      <p className="text-sm text-neutral-500">{item.desc}</p>
                     </div>
-                    <Switch defaultChecked />
+                    <Switch defaultChecked={item.defaultOn} />
                   </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-medium text-neutral-800">Meditation Recommendations</h3>
-                      <p className="text-sm text-neutral-600">Suggestions based on your mood patterns</p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-medium text-neutral-800">Weekly Progress Reports</h3>
-                      <p className="text-sm text-neutral-600">Receive insights about your weekly mood trends</p>
-                    </div>
-                    <Switch defaultChecked />
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-medium text-neutral-800">Professional Recommendations</h3>
-                      <p className="text-sm text-neutral-600">Updates about new therapists in your area</p>
-                    </div>
-                    <Switch />
-                  </div>
-                </div>
+                ))}
               </div>
             </TabsContent>
 
-            <TabsContent value="privacy">
-              <div className="p-6">
-                <div className="flex flex-col md:flex-row">
-                  <div className="md:w-1/3 mb-6 md:mb-0 md:pr-6">
-                    <h2 className="font-display font-semibold text-lg text-neutral-800 mb-2">Data & Privacy</h2>
-                    <p className="text-neutral-600 text-sm">Manage your data and control how it's used.</p>
-                  </div>
-                  <div className="md:w-2/3">
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
-                        <div>
-                          <h3 className="font-medium text-neutral-800 mb-1">Download Your Data</h3>
-                          <p className="text-sm text-neutral-600">Get a copy of all your data stored in our system.</p>
-                        </div>
-                        <Button variant="outline">
-                          Request Data
-                        </Button>
-                      </div>
-                      
-                      <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
-                        <div>
-                          <h3 className="font-medium text-neutral-800 mb-1">Delete Account</h3>
-                          <p className="text-sm text-neutral-600">Permanently remove your account and all associated data.</p>
-                        </div>
-                        <Button variant="destructive">
-                          Delete Account
-                        </Button>
-                      </div>
+            {/* Emergency Contacts Tab */}
+            <TabsContent value="emergency" className="p-6">
+              <h2 className="font-semibold text-lg text-neutral-800 mb-2">Emergency Contacts</h2>
+              <p className="text-sm text-neutral-500 mb-6">
+                People who can be reached if you use the SOS feature.
+              </p>
 
-                      <div className="p-4 border border-primary-100 bg-primary-50 rounded-lg">
-                        <div className="flex items-start">
-                          <div className="mr-3 text-primary-500 mt-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-primary-700 mb-1">Privacy Protection</h3>
-                            <p className="text-sm text-primary-600">Your data is encrypted and securely stored. We never share your personal information with third parties without your explicit consent.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+              <div className="bg-neutral-50 rounded-lg p-4 mb-6">
+                <h3 className="font-medium text-neutral-800 mb-3 flex items-center gap-2">
+                  <UserPlus className="h-4 w-4" /> Add Contact
+                </h3>
+                <form
+                  onSubmit={contactForm.handleSubmit((data) => addContactMutation.mutate(data))}
+                  className="grid grid-cols-1 md:grid-cols-2 gap-3"
+                >
+                  <Input placeholder="Name *" {...contactForm.register("name")} />
+                  <Input placeholder="Relationship" {...contactForm.register("relationship")} />
+                  <Input placeholder="Phone" {...contactForm.register("phone")} />
+                  <Input placeholder="Email" type="email" {...contactForm.register("email")} />
+                  <div className="md:col-span-2 flex justify-end">
+                    <Button type="submit" size="sm" disabled={addContactMutation.isPending}>
+                      {addContactMutation.isPending && (
+                        <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                      )}
+                      Add
+                    </Button>
                   </div>
-                </div>
+                </form>
               </div>
-            </TabsContent>
 
-            <TabsContent value="emergency">
-              <div className="p-6">
-                <h2 className="font-display font-semibold text-lg text-neutral-800 mb-4">Emergency Contacts</h2>
-                
-                <div className="bg-neutral-50 p-4 rounded-lg mb-6">
-                  <p className="text-sm text-neutral-600">Add trusted contacts who can be notified in case of emergency. They will receive an alert with your location if you use the SOS feature.</p>
+              {contactsLoading ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
                 </div>
-                
-                <div className="space-y-4 mb-6">
-                  {/* Emergency contact form */}
-                  <div className="bg-white border border-neutral-200 rounded-lg p-4">
-                    <h3 className="font-medium text-neutral-800 mb-4">Add New Contact</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              ) : contacts.length === 0 ? (
+                <p className="text-center text-neutral-400 py-8">No emergency contacts yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {contacts.map((c: any) => (
+                    <div
+                      key={c.id}
+                      className="flex justify-between items-center p-3 bg-white border rounded-lg"
+                    >
                       <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">Contact Name</label>
-                        <Input placeholder="Jane Doe" id="contact-name" />
+                        <h4 className="font-medium text-neutral-800">{c.name}</h4>
+                        <div className="flex gap-4 text-sm text-neutral-500">
+                          {c.relationship && <span>{c.relationship}</span>}
+                          {c.phone && <span>{c.phone}</span>}
+                          {c.email && <span>{c.email}</span>}
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">Relationship</label>
-                        <Input placeholder="Friend, Family, etc." id="relationship" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">Phone Number</label>
-                        <Input placeholder="+1 (555) 123-4567" id="phone-number" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-700 mb-1">Email</label>
-                        <Input placeholder="contact@example.com" id="contact-email" />
-                      </div>
-                    </div>
-                    <div className="flex justify-end">
-                      <Button 
-                        onClick={() => {
-                          // In a real implementation, this would save to a database
-                          // For now, we'll just show a toast message
-                          const name = (document.getElementById('contact-name') as HTMLInputElement)?.value;
-                          const relationship = (document.getElementById('relationship') as HTMLInputElement)?.value;
-                          const phone = (document.getElementById('phone-number') as HTMLInputElement)?.value;
-                          const email = (document.getElementById('contact-email') as HTMLInputElement)?.value;
-                          
-                          if (!name) {
-                            toast({
-                              title: "Missing information",
-                              description: "Please provide at least a contact name",
-                              variant: "destructive"
-                            });
-                            return;
-                          }
-                          
-                          toast({
-                            title: "Contact added",
-                            description: `Rs.{name} has been added to your emergency contacts.`,
-                          });
-                          
-                          // Clear the form
-                          (document.getElementById('contact-name') as HTMLInputElement).value = '';
-                          (document.getElementById('relationship') as HTMLInputElement).value = '';
-                          (document.getElementById('phone-number') as HTMLInputElement).value = '';
-                          (document.getElementById('contact-email') as HTMLInputElement).value = '';
-                        }}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        onClick={() => deleteContactMutation.mutate(c.id)}
                       >
-                        Add Contact
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-                  </div>
-                  
-                  {/* Added contacts list */}
-                  <div className="bg-white border border-neutral-200 rounded-lg p-4">
-                    <h3 className="font-medium text-neutral-800 mb-4">Current Emergency Contacts</h3>
-                    
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 bg-neutral-50 rounded-lg">
-                        <div>
-                          <h4 className="font-medium text-neutral-800">Sarah Johnson</h4>
-                          <div className="flex text-sm text-neutral-600 gap-x-4">
-                            <span>Sister</span>
-                            <span>+1 (555) 987-6543</span>
-                          </div>
-                        </div>
-                        <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700 hover:bg-red-50">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </Button>
-                      </div>
-                      
-                      <div className="flex justify-between items-center p-3 bg-neutral-50 rounded-lg">
-                        <div>
-                          <h4 className="font-medium text-neutral-800">Dr. Michael Chen</h4>
-                          <div className="flex text-sm text-neutral-600 gap-x-4">
-                            <span>Therapist</span>
-                            <span>+1 (555) 123-4567</span>
-                          </div>
-                        </div>
-                        <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700 hover:bg-red-50">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              </div>
+              )}
             </TabsContent>
 
-            <TabsContent value="subscription">
-              <div className="p-6">
-                <h2 className="font-display font-semibold text-lg text-neutral-800 mb-4">Your Subscription</h2>
-                
-                <div className="bg-primary-50 border border-primary-100 rounded-lg p-6 mb-8">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                    <div className="mb-4 md:mb-0">
-                      <div className="inline-block bg-white px-3 py-1 rounded-full text-xs font-medium text-primary-600 mb-2">
-                        Current Plan
+            {/* Subscription Tab */}
+            <TabsContent value="subscription" className="p-6">
+              <h2 className="font-semibold text-lg text-neutral-800 mb-4">Your Plan</h2>
+
+              <div className="bg-purple-50 border border-purple-100 rounded-lg p-6 mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                  <span className="inline-block bg-white px-3 py-1 rounded-full text-xs font-medium text-purple-600 mb-2">
+                    Current
+                  </span>
+                  <h3 className="text-xl font-bold text-purple-700 mb-1 capitalize">
+                    {(user as any)?.accountType || "free"} Plan
+                  </h3>
+                  <p className="text-sm text-purple-600">Basic access to mental wellness tools</p>
+                </div>
+                <Button>Upgrade to Premium</Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  {
+                    name: "Free",
+                    price: "\u20B90",
+                    features: ["Basic AI chat support", "Mood tracking", "5 meditation sessions/month"],
+                    current: true,
+                  },
+                  {
+                    name: "Premium",
+                    price: "\u20B999.99",
+                    features: [
+                      "Unlimited AI chat",
+                      "Detailed mood analytics",
+                      "Unlimited meditation",
+                      "Priority professional matching",
+                    ],
+                    popular: true,
+                  },
+                  {
+                    name: "Family",
+                    price: "\u20B9249.99",
+                    features: [
+                      "All Premium for 5 users",
+                      "Family activity dashboard",
+                      "Shared meditation sessions",
+                      "Family wellness insights",
+                    ],
+                  },
+                ].map((plan) => (
+                  <div
+                    key={plan.name}
+                    className={`border rounded-lg p-6 relative ${
+                      plan.popular ? "border-2 border-purple-400" : "border-neutral-200"
+                    }`}
+                  >
+                    {plan.popular && (
+                      <div className="absolute top-0 right-0 bg-purple-500 text-white px-3 py-1 rounded-bl-lg rounded-tr-lg text-xs font-medium">
+                        Popular
                       </div>
-                      <h3 className="text-xl font-bold text-primary-700 mb-1">Free Plan</h3>
-                      <p className="text-sm text-primary-600">Basic access to mental wellness tools</p>
-                    </div>
-                    <Button variant="default">
-                      Upgrade to Premium
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {/* Free Plan */}
-                  <div className="border border-neutral-200 rounded-lg p-6">
-                    <div className="bg-neutral-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-neutral-800 mb-2">Free Plan</h3>
-                    <p className="text-sm text-neutral-600 mb-4">Basic access to mental wellness tools</p>
-                    <p className="text-xl font-bold text-neutral-800 mb-6">Rs.0<span className="text-sm font-normal text-neutral-500">/month</span></p>
+                    )}
+                    <h3 className="text-lg font-semibold text-neutral-800 mb-1">{plan.name}</h3>
+                    <p className="text-xl font-bold text-neutral-800 mb-4">
+                      {plan.price}
+                      <span className="text-sm font-normal text-neutral-500">/month</span>
+                    </p>
                     <ul className="space-y-2 mb-6">
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Basic AI chat support
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Mood tracking
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        5 meditation sessions/month
-                      </li>
+                      {plan.features.map((f) => (
+                        <li key={f} className="flex items-center text-sm">
+                          <svg
+                            className="h-4 w-4 text-green-500 mr-2 flex-shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          {f}
+                        </li>
+                      ))}
                     </ul>
-                    <Button className="w-full" variant="outline">
-                      Current Plan
+                    <Button className="w-full" variant={plan.current ? "outline" : "default"}>
+                      {plan.current ? "Current Plan" : "Choose Plan"}
                     </Button>
                   </div>
-                  
-                  {/* Premium Plan */}
-                  <div className="border-2 border-primary-400 rounded-lg p-6 relative">
-                    <div className="absolute top-0 right-0 bg-primary-400 text-white px-3 py-1 rounded-bl-lg rounded-tr-lg text-xs font-medium">
-                      Popular
-                    </div>
-                    <div className="bg-primary-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-neutral-800 mb-2">Premium Plan</h3>
-                    <p className="text-sm text-neutral-600 mb-4">Full access to all features and content</p>
-                    <p className="text-xl font-bold text-neutral-800 mb-6">Rs.99.99<span className="text-sm font-normal text-neutral-500">/month</span></p>
-                    <ul className="space-y-2 mb-6">
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Advanced AI chat (unlimited)
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Detailed mood analytics
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Unlimited meditation content
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Priority professional matching
-                      </li>
-                    </ul>
-                    <Button className="w-full">
-                      Upgrade Now
-                    </Button>
-                  </div>
-                  
-                  {/* Family Plan */}
-                  <div className="border border-neutral-200 rounded-lg p-6">
-                    <div className="bg-accent-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-neutral-800 mb-2">Family Plan</h3>
-                    <p className="text-sm text-neutral-600 mb-4">Premium benefits for up to 5 people</p>
-                    <p className="text-xl font-bold text-neutral-800 mb-6">Rs.24.99<span className="text-sm font-normal text-neutral-500">/month</span></p>
-                    <ul className="space-y-2 mb-6">
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        All Premium features for 5 users
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Family activity dashboard
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Shared meditation sessions
-                      </li>
-                      <li className="flex items-center text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-success mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Family wellness insights
-                      </li>
-                    </ul>
-                    <Button className="w-full" variant="outline">
-                      Choose Plan
-                    </Button>
-                  </div>
-                </div>
+                ))}
               </div>
             </TabsContent>
           </Tabs>

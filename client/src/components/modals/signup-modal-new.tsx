@@ -21,7 +21,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, Eye, EyeOff, Zap, ArrowRight, Check, Star } from "lucide-react";
+import {
+  Loader2,
+  Eye,
+  EyeOff,
+  Zap,
+  ArrowRight,
+  Check,
+  Star,
+} from "lucide-react";
 import { insertUserSchema } from "@shared/schema";
 
 interface SignupModalProps {
@@ -30,20 +38,26 @@ interface SignupModalProps {
   onLoginClick: () => void;
 }
 
-const signupSchema = insertUserSchema.extend({
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string(),
-  terms: z.boolean().refine((val) => val === true, {
-    message: "You must agree to the terms and conditions",
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const signupSchema = insertUserSchema
+  .extend({
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+    terms: z.boolean().refine((val) => val === true, {
+      message: "You must agree to the terms and conditions",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type SignupFormValues = z.infer<typeof signupSchema>;
 
-export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupModalProps) {
+export default function SignupModal({
+  isOpen,
+  onClose,
+  onLoginClick,
+}: SignupModalProps) {
   const { registerMutation } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -64,7 +78,7 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
   const onSubmit = (data: SignupFormValues) => {
     // Remove confirmPassword and terms as they're not part of the schema
     const { confirmPassword, terms, ...userData } = data;
-    
+
     registerMutation.mutate(userData, {
       onSuccess: () => {
         onClose();
@@ -109,19 +123,24 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
           {/* Form content */}
           <div className="p-3 sm:p-4 max-h-[70vh] overflow-y-auto">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-3">
                 <div className="grid grid-cols-2 gap-2">
                   <FormField
                     control={form.control}
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700 font-medium text-xs">First Name</FormLabel>
+                        <FormLabel className="text-gray-700 font-medium text-xs">
+                          First Name
+                        </FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Jane" 
+                          <Input
+                            placeholder="Jane"
                             className="h-8 border border-gray-200 focus:border-purple-500 rounded-md text-sm"
-                            {...field} 
+                            {...field}
+                            value={field.value ?? ""}
                           />
                         </FormControl>
                         <FormMessage />
@@ -133,12 +152,15 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700 font-medium text-xs">Last Name</FormLabel>
+                        <FormLabel className="text-gray-700 font-medium text-xs">
+                          Last Name
+                        </FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Doe" 
+                          <Input
+                            placeholder="Doe"
                             className="h-8 border border-gray-200 focus:border-purple-500 rounded-md text-sm"
-                            {...field} 
+                            {...field}
+                            value={field.value ?? ""}
                           />
                         </FormControl>
                         <FormMessage />
@@ -152,12 +174,14 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium text-xs">Username</FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-xs">
+                        Username
+                      </FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="Choose username" 
+                        <Input
+                          placeholder="Choose username"
                           className="h-8 border border-gray-200 focus:border-purple-500 rounded-md text-sm"
-                          {...field} 
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -170,13 +194,16 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium text-xs">Email</FormLabel>
+                      <FormLabel className="text-gray-700 font-medium text-xs">
+                        Email
+                      </FormLabel>
                       <FormControl>
-                        <Input 
-                          type="email" 
-                          placeholder="your@email.com" 
+                        <Input
+                          type="email"
+                          placeholder="your@email.com"
                           className="h-8 border border-gray-200 focus:border-purple-500 rounded-md text-sm"
-                          {...field} 
+                          {...field}
+                          value={field.value ?? ""}
                         />
                       </FormControl>
                       <FormMessage />
@@ -190,21 +217,26 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700 font-medium text-xs">Password</FormLabel>
+                        <FormLabel className="text-gray-700 font-medium text-xs">
+                          Password
+                        </FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <Input 
-                              type={showPassword ? "text" : "password"} 
+                            <Input
+                              type={showPassword ? "text" : "password"}
                               placeholder="Password"
                               className="h-8 border border-gray-200 focus:border-purple-500 rounded-md text-sm pr-8"
-                              {...field} 
+                              {...field}
                             />
-                            <button 
+                            <button
                               type="button"
                               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md"
-                              onClick={togglePasswordVisibility}
-                            >
-                              {showPassword ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                              onClick={togglePasswordVisibility}>
+                              {showPassword ? (
+                                <EyeOff className="h-3 w-3" />
+                              ) : (
+                                <Eye className="h-3 w-3" />
+                              )}
                             </button>
                           </div>
                         </FormControl>
@@ -218,21 +250,26 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700 font-medium text-xs">Confirm</FormLabel>
+                        <FormLabel className="text-gray-700 font-medium text-xs">
+                          Confirm
+                        </FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <Input 
-                              type={showConfirmPassword ? "text" : "password"} 
+                            <Input
+                              type={showConfirmPassword ? "text" : "password"}
                               placeholder="Confirm"
                               className="h-8 border border-gray-200 focus:border-purple-500 rounded-md text-sm pr-8"
-                              {...field} 
+                              {...field}
                             />
-                            <button 
+                            <button
                               type="button"
                               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-md"
-                              onClick={toggleConfirmPasswordVisibility}
-                            >
-                              {showConfirmPassword ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                              onClick={toggleConfirmPasswordVisibility}>
+                              {showConfirmPassword ? (
+                                <EyeOff className="h-3 w-3" />
+                              ) : (
+                                <Eye className="h-3 w-3" />
+                              )}
                             </button>
                           </div>
                         </FormControl>
@@ -257,11 +294,15 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                       <div className="space-y-1 leading-none">
                         <FormLabel className="text-gray-700 text-xs">
                           I agree to the{" "}
-                          <a href="#" className="text-violet-600 hover:text-violet-700 font-medium underline">
+                          <a
+                            href="#"
+                            className="text-violet-600 hover:text-violet-700 font-medium underline">
                             Terms
                           </a>{" "}
                           and{" "}
-                          <a href="#" className="text-violet-600 hover:text-violet-700 font-medium underline">
+                          <a
+                            href="#"
+                            className="text-violet-600 hover:text-violet-700 font-medium underline">
                             Privacy Policy
                           </a>
                         </FormLabel>
@@ -271,11 +312,10 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
                   )}
                 />
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={registerMutation.isPending}
-                  className="w-full h-9 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 hover:from-violet-700 hover:via-purple-700 hover:to-indigo-800 text-white font-medium rounded-md text-sm transition-all duration-200 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2"
-                >
+                  className="w-full h-9 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-700 hover:from-violet-700 hover:via-purple-700 hover:to-indigo-800 text-white font-medium rounded-md text-sm transition-all duration-200 shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2">
                   {registerMutation.isPending ? (
                     <>
                       <Loader2 className="mr-1 h-3 w-3 animate-spin" />
@@ -292,11 +332,10 @@ export default function SignupModal({ isOpen, onClose, onLoginClick }: SignupMod
             <div className="mt-3 text-center">
               <p className="text-gray-600 text-xs">
                 Have an account?{" "}
-                <Button 
-                  variant="link" 
+                <Button
+                  variant="link"
                   className="p-0 h-auto text-xs text-violet-600 hover:text-violet-700 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-2 rounded-md"
-                  onClick={handleSwitchToLogin}
-                >
+                  onClick={handleSwitchToLogin}>
                   Sign in
                 </Button>
               </p>
